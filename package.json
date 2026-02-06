@@ -1,0 +1,27 @@
+{
+    "name": "gcu-proposal-viewer",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --port 3001",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "next": "^15.0.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "drizzle-orm": "^0.38.0",
+        "@vercel/postgres": "^0.10.0",
+        "recharts": "^2.15.0",
+        "clsx": "^2.1.0",
+        "lucide-react": "^0.460.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
+        "typescript": "^5.0.0"
+    }
+}
