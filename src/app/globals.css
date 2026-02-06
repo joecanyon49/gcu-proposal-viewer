@@ -6,12 +6,22 @@
   box-sizing: border-box;
 }
 
-html, body {
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+}
+
+html {
+  color-scheme: light;
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f9fafb;
-  color: #111827;
+  background-color: white !important;
+  color: black !important;
 }
 
 /* Ensure clean print styles */
@@ -19,6 +29,7 @@ html, body {
   body {
     background: white;
   }
+
   .print\:hidden {
     display: none;
   }
@@ -34,16 +45,22 @@ html, body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { 
+  from {
     opacity: 0;
     transform: translateY(20px);
   }
-  to { 
+
+  to {
     opacity: 1;
     transform: translateY(0);
   }
