@@ -23,10 +23,10 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const secondaryStyle = { color: getSecondaryColor() };
     const bgSecondaryStyle = { backgroundColor: getSecondaryColor() };
 
-    // Common Section Container
+    // Common Section Container - responsive padding for mobile
     const SectionContainer = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
         <div className={clsx(
-            "relative w-full min-h-[1056px] flex flex-col p-16 break-before-page print:break-before-page overflow-hidden",
+            "relative w-full min-h-screen md:min-h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page print:break-before-page overflow-hidden",
             className
         )} style={{ fontFamily: getFont(), backgroundColor: getBgColor(), color: getTextColor() }}>
             {children}
@@ -53,7 +53,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
     // --- SECTIONS ---
 
     const Cover = ({ section, meta }: { section: CoverSection, meta: any }) => (
-        <div className="relative w-full h-[1056px] flex flex-col justify-end p-20 break-before-page text-white overflow-hidden" style={{ fontFamily: getFont() }}>
+        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-end p-6 sm:p-10 md:p-20 break-before-page text-white overflow-hidden" style={{ fontFamily: getFont() }}>
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image && (
@@ -65,19 +65,19 @@ const Preview = ({ data }: { data: ProposalData }) => {
             </div>
 
             {/* Top Left Logo */}
-            <div className="absolute top-0 left-0 p-16 z-20">
-                <img src="/assets/RunningLope_WHITE.png" alt="GCU" className="h-20 w-auto object-contain" />
+            <div className="absolute top-0 left-0 p-4 sm:p-8 md:p-16 z-20">
+                <img src="/assets/RunningLope_WHITE.png" alt="GCU" className="h-12 sm:h-16 md:h-20 w-auto object-contain" />
             </div>
 
             {/* Content */}
-            <div className="relative z-10 mb-12 animate-slide-up">
-                <div className="w-24 h-2 mb-8 bg-white/80"></div>
-                <h1 className="text-7xl font-extrabold uppercase tracking-tighter mb-4 leading-tight">
+            <div className="relative z-10 mb-6 sm:mb-12 animate-slide-up">
+                <div className="w-16 sm:w-24 h-1.5 sm:h-2 mb-4 sm:mb-8 bg-white/80"></div>
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold uppercase tracking-tighter mb-2 sm:mb-4 leading-tight">
                     {section.title}
                 </h1>
-                <p className="text-3xl font-light opacity-90 mb-16 max-w-3xl">{section.subtitle}</p>
+                <p className="text-lg sm:text-2xl md:text-3xl font-light opacity-90 mb-8 sm:mb-16 max-w-3xl">{section.subtitle}</p>
 
-                <div className="grid grid-cols-2 gap-12 border-t border-white/20 pt-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 border-t border-white/20 pt-6 sm:pt-10">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">Prepared For</p>
                         <p className="text-2xl font-bold">{meta.preparedFor}</p>
@@ -91,7 +91,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
             </div>
 
             {/* Decorative Elements */}
-            <div className="absolute top-0 right-0 p-16 z-20">
+            <div className="absolute top-0 right-0 p-4 sm:p-8 md:p-16 z-20">
                 {meta.clientLogo ? (
                     <img src={meta.clientLogo} alt="Client Logo" className="h-20 object-contain drop-shadow-lg bg-white/10 backdrop-blur-md p-2 rounded-lg" />
                 ) : (
@@ -554,7 +554,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
     );
 
     const BackCover = ({ section, meta }: { section: BackCoverSection, meta: any }) => (
-        <div className="relative w-full h-[1056px] flex flex-col justify-center p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getFont() }}>
+        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-center p-6 sm:p-10 md:p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getFont() }}>
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image ? (
@@ -572,17 +572,17 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 </div>
             </div>
 
-            <div className="relative z-10 text-center max-w-4xl mx-auto space-y-12">
+            <div className="relative z-10 text-center max-w-4xl mx-auto space-y-6 sm:space-y-12 px-4">
                 {/* Logo or Brand Mark */}
-                <div className="flex justify-center mb-12">
+                <div className="flex justify-center mb-6 sm:mb-12">
                     <img
                         src="/assets/RunningLope_WHITE.png"
                         alt="GCU Lope"
-                        className="h-32 object-contain opacity-90 drop-shadow-2xl"
+                        className="h-20 sm:h-24 md:h-32 object-contain opacity-90 drop-shadow-2xl"
                     />
                 </div>
 
-                <h1 className="text-6xl font-black uppercase tracking-tight leading-none drop-shadow-lg">
+                <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-none drop-shadow-lg">
                     {section.title}
                 </h1>
 
@@ -607,7 +607,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     // --- MAIN RENDER ---
     return (
-        <div className="w-full max-w-[816px] mx-auto bg-white shadow-2xl my-10 overflow-hidden print:w-full print:max-w-none print:shadow-none print:my-0">
+        <div className="w-full max-w-full md:max-w-[816px] mx-auto bg-white shadow-none md:shadow-2xl my-0 md:my-10 overflow-hidden print:w-full print:max-w-none print:shadow-none print:my-0">
             <style>
                 {`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;800&family=Open+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap');`}
             </style>
