@@ -66,7 +66,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
             {/* Top Left Logo */}
             <div className="absolute top-0 left-0 p-16 z-20">
-                <img src={`${MAIN_PORTAL_URL}/assets/RunningLope_WHITE.png`} alt="GCU" className="h-20 w-auto object-contain" />
+                <img src="/assets/RunningLope_WHITE.png" alt="GCU" className="h-20 w-auto object-contain" />
             </div>
 
             {/* Content */}
@@ -576,7 +576,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 {/* Logo or Brand Mark */}
                 <div className="flex justify-center mb-12">
                     <img
-                        src={`${MAIN_PORTAL_URL}/assets/RunningLope_WHITE.png`}
+                        src="/assets/RunningLope_WHITE.png"
                         alt="GCU Lope"
                         className="h-32 object-contain opacity-90 drop-shadow-2xl"
                     />
