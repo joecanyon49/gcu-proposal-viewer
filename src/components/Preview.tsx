@@ -114,18 +114,18 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         {section.content}
                     </div>
 
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6 overflow-hidden">
                         {(section.summaryPillars || []).map((pillar, i) => (
-                            <div key={i} className="flex items-start gap-6 p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow duration-300 group">
-                                <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold text-white shadow-md transform group-hover:scale-110 transition-transform duration-300 flex-shrink-0" style={bgPrimaryStyle}>
+                            <div key={i} className="flex items-start gap-3 sm:gap-6 p-4 sm:p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow duration-300 group">
+                                <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center text-lg sm:text-2xl font-bold text-white shadow-md transform group-hover:scale-110 transition-transform duration-300 flex-shrink-0" style={bgPrimaryStyle}>
                                     {pillar.icon === '1' && <Target size={28} />}
                                     {pillar.icon === '2' && <Zap size={28} />}
                                     {pillar.icon === '3' && <Star size={28} />}
                                     {!['1', '2', '3'].includes(pillar.icon) && pillar.icon}
                                 </div>
-                                <div>
-                                    <h4 className="text-xl font-bold text-gray-900 mb-2">{pillar.title}</h4>
-                                    <p className="text-gray-500 leading-snug">{pillar.description}</p>
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="text-base sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2">{pillar.title}</h4>
+                                    <p className="text-sm sm:text-base text-gray-500 leading-snug break-words">{pillar.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -229,11 +229,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
         <SectionContainer>
             <SectionHeader title={section.title} subtitle="Strategic Roadmap" />
 
-            <div className="grid grid-cols-12 gap-12 flex-1">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 flex-1 overflow-hidden">
                 {/* Left Column: List */}
-                <div className="col-span-12 lg:col-span-8 flex flex-col gap-8">
+                <div className="col-span-1 lg:col-span-8 flex flex-col gap-4 sm:gap-8 overflow-hidden">
                     {section.elements.map((el, i) => (
-                        <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-300 transition-all duration-300 relative overflow-hidden group">
+                        <div key={i} className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-300 transition-all duration-300 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                 <h4 className="text-9xl font-black text-gray-900">{i + 1}</h4>
                             </div>
@@ -243,9 +243,9 @@ const Preview = ({ data }: { data: ProposalData }) => {
                                 <div className="flex-1">
                                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{el.title}</h3>
                                     <p className="text-gray-600 mb-6 font-medium">{el.description}</p>
-                                    <div className="flex flex-wrap gap-3">
+                                    <div className="flex flex-wrap gap-2 sm:gap-3">
                                         {el.items.map((item, j) => (
-                                            <span key={j} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 text-sm font-semibold text-gray-700 border border-gray-200">
+                                            <span key={j} className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-gray-50 text-xs sm:text-sm font-semibold text-gray-700 border border-gray-200">
                                                 <CheckCircle2 size={14} style={{ color: getPrimaryColor() }} />
                                                 {item}
                                             </span>
@@ -303,11 +303,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 data-primary-color={primaryColor}
                 className="absolute inset-0 flex flex-col items-center justify-center p-8"
             >
-                <div className="w-full max-w-lg space-y-10 animate-fade-in">
-                    <div className="space-y-6">
-                        <div className="flex justify-between items-end text-sm font-bold text-gray-400 uppercase tracking-widest">
+                <div className="w-full max-w-lg space-y-6 sm:space-y-10 animate-fade-in">
+                    <div className="space-y-4 sm:space-y-6">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
                             <span>Contribution</span>
-                            <span id="impact-amount-display" className="text-3xl font-black" style={{ color: primaryColor }}>${amount.toLocaleString()}</span>
+                            <span id="impact-amount-display" className="text-2xl sm:text-3xl font-black" style={{ color: primaryColor }}>${amount.toLocaleString()}</span>
                         </div>
                         <div className="relative h-4 bg-gray-100 rounded-full print:hidden">
                             <div
@@ -337,20 +337,22 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-8">
-                        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
-                            <div className="mb-2 p-3 rounded-full bg-purple-50 text-purple-600">
-                                <Target size={24} style={{ color: primaryColor }} />
+                    <div className="grid grid-cols-2 gap-3 sm:gap-8">
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="mb-1 sm:mb-2 p-2 sm:p-3 rounded-full bg-purple-50 text-purple-600">
+                                <Target size={18} className="sm:hidden" style={{ color: primaryColor }} />
+                                <Target size={24} className="hidden sm:block" style={{ color: primaryColor }} />
                             </div>
-                            <div id="impact-scholarships-display" className="text-4xl font-black text-gray-900 mb-1 transition-all">{scholarships}</div>
-                            <div className="text-xs font-bold uppercase tracking-widest text-gray-400">Scholarships Funded</div>
+                            <div id="impact-scholarships-display" className="text-2xl sm:text-4xl font-black text-gray-900 mb-0.5 sm:mb-1 transition-all">{scholarships}</div>
+                            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">Scholarships</div>
                         </div>
-                        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
-                            <div className="mb-2 p-3 rounded-full bg-blue-50 text-blue-600">
-                                <Zap size={24} style={{ color: primaryColor }} />
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="mb-1 sm:mb-2 p-2 sm:p-3 rounded-full bg-blue-50 text-blue-600">
+                                <Zap size={18} className="sm:hidden" style={{ color: primaryColor }} />
+                                <Zap size={24} className="hidden sm:block" style={{ color: primaryColor }} />
                             </div>
-                            <div id="impact-hours-display" className="text-4xl font-black text-gray-900 mb-1 transition-all">{serviceHours.toLocaleString()}+</div>
-                            <div className="text-xs font-bold uppercase tracking-widest text-gray-400">Hours of Impact</div>
+                            <div id="impact-hours-display" className="text-2xl sm:text-4xl font-black text-gray-900 mb-0.5 sm:mb-1 transition-all">{serviceHours.toLocaleString()}+</div>
+                            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">Hours of Impact</div>
                         </div>
                     </div>
 
@@ -466,16 +468,16 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <p className="text-xl text-gray-500">Partnership Commitment</p>
                 </div>
 
-                <div className="bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden relative">
+                <div className="bg-white rounded-2xl sm:rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden relative">
                     <div className="h-4 w-full" style={bgPrimaryStyle}></div>
-                    <div className="p-16 flex flex-col gap-10">
+                    <div className="p-4 sm:p-8 md:p-16 flex flex-col gap-6 sm:gap-10">
                         {section.elements.map((el, i) => (
                             <React.Fragment key={i}>
                                 {el.isTotal ? (
-                                    <div className="mt-8 pt-10 border-t-2 border-dashed border-gray-200">
-                                        <div className="flex justify-between items-end">
-                                            <span className="text-2xl font-bold text-gray-400 uppercase tracking-widest">{el.item}</span>
-                                            <span className="text-7xl font-black tracking-tighter" style={{ color: getPrimaryColor() }}>{el.cost}</span>
+                                    <div className="mt-4 sm:mt-8 pt-6 sm:pt-10 border-t-2 border-dashed border-gray-200">
+                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
+                                            <span className="text-lg sm:text-2xl font-bold text-gray-400 uppercase tracking-widest">{el.item}</span>
+                                            <span className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter" style={{ color: getPrimaryColor() }}>{el.cost}</span>
                                         </div>
                                     </div>
                                 ) : (
@@ -492,7 +494,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                             </React.Fragment>
                         ))}
                     </div>
-                    <div className="bg-gray-50 px-16 py-8 text-center border-t border-gray-100">
+                    <div className="bg-gray-50 px-4 sm:px-8 md:px-16 py-4 sm:py-8 text-center border-t border-gray-100">
                         <p className="text-gray-500 text-sm font-medium">
                             This proposal is valid for 30 days from presentation.
                         </p>
