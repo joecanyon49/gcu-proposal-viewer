@@ -301,15 +301,15 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 data-min={minDonation}
                 data-max={maxDonation}
                 data-primary-color={primaryColor}
-                className="absolute inset-0 flex flex-col items-center justify-center p-8"
+                className="flex flex-col items-center justify-center w-full h-full p-4 sm:p-8"
             >
-                <div className="w-full max-w-lg space-y-6 sm:space-y-10 animate-fade-in">
-                    <div className="space-y-4 sm:space-y-6">
-                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
+                <div className="w-full max-w-lg space-y-4 sm:space-y-8 animate-fade-in">
+                    <div className="space-y-3 sm:space-y-6">
+                        <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end sm:gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
                             <span>Contribution</span>
-                            <span id="impact-amount-display" className="text-2xl sm:text-3xl font-black" style={{ color: primaryColor }}>${amount.toLocaleString()}</span>
+                            <span id="impact-amount-display" className="text-xl sm:text-3xl font-black" style={{ color: primaryColor }}>${amount.toLocaleString()}</span>
                         </div>
-                        <div className="relative h-4 bg-gray-100 rounded-full print:hidden">
+                        <div className="relative h-6 sm:h-4 bg-gray-100 rounded-full print:hidden touch-none">
                             <div
                                 id="impact-slider-fill"
                                 className="absolute top-0 left-0 h-full rounded-full transition-all duration-75"
@@ -323,12 +323,13 @@ const Preview = ({ data }: { data: ProposalData }) => {
                                 step={step}
                                 value={amount}
                                 onChange={(e) => setAmount(Number(e.target.value))}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer touch-none"
+                                style={{ touchAction: 'none' }}
                             />
                             <div
                                 id="impact-slider-thumb"
-                                className="absolute top-1/2 w-6 h-6 bg-white border-2 rounded-full shadow-md pointer-events-none transition-all duration-75"
-                                style={{ left: `${percentage}%`, borderColor: primaryColor, transform: `translate(-50%, calc(-50% + 0.5px))` }}
+                                className="absolute top-1/2 w-8 h-8 sm:w-6 sm:h-6 bg-white border-2 rounded-full shadow-md pointer-events-none"
+                                style={{ left: `${percentage}%`, borderColor: primaryColor, transform: `translate(-50%, -50%)` }}
                             />
                         </div>
                         <div className="flex justify-between text-xs font-medium text-gray-400 print:hidden">
@@ -356,8 +357,8 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         </div>
                     </div>
 
-                    <p className="text-center text-xs font-medium text-gray-400 max-w-xs mx-auto print:hidden">
-                        Drag the slider to see how your contribution directly impacts our students and community.
+                    <p className="text-center text-[10px] sm:text-xs font-medium text-gray-400 px-2 print:hidden">
+                        Drag the slider to explore your impact.
                     </p>
                 </div>
             </div>
@@ -397,11 +398,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 </div>
 
                 {/* Graph / Data Analysis Area */}
-                <div className="flex-1 bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-inner relative flex flex-col min-h-[350px]">
-                    <div className="flex items-center justify-between mb-6 shrink-0">
-                        <h3 className="text-xl font-bold text-gray-700 flex items-center gap-2">
-                            {section.graph && section.graph.data.length > 0 ? <TrendingUp size={20} /> : <Calculator size={20} />}
-                            {section.graph && section.graph.data.length > 0 ? "Data Analysis" : "Impact Calculator"}
+                <div className="flex-1 bg-gray-50 rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-gray-200 shadow-inner relative flex flex-col min-h-[320px] sm:min-h-[350px] overflow-hidden">
+                    <div className="flex items-center justify-between mb-4 sm:mb-6 shrink-0">
+                        <h3 className="text-base sm:text-xl font-bold text-gray-700 flex items-center gap-2">
+                            {section.graph && section.graph.data.length > 0 ? <TrendingUp size={18} className="shrink-0" /> : <Calculator size={18} className="shrink-0" />}
+                            <span className="truncate">{section.graph && section.graph.data.length > 0 ? "Data Analysis" : "Impact Calculator"}</span>
                         </h3>
                         {section.graph && section.graph.data.length > 0 && (
                             <div className="flex gap-2">
