@@ -66,7 +66,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 {section.image && (
                     <img src={section.image} alt="Cover" className="w-full h-full object-cover" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-black/10"></div>
                 {/* Accent Overlay */}
                 <div className="absolute inset-0 mix-blend-multiply transition-opacity duration-300" style={{ ...bgPrimaryStyle, opacity: data.theme.overlayOpacity ?? 0.6 }}></div>
             </div>
@@ -107,7 +107,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     </div>
                 )}
             </div>
-            <div className="absolute bottom-0 right-0 w-64 h-64 border-t-[32px] border-l-[32px] border-white/10 rounded-tl-[100px] pointer-events-none"></div>
+            <div className="absolute bottom-0 right-0 w-64 h-64 border-t-32 border-l-32 border-white/10 rounded-tl-[100px] pointer-events-none"></div>
         </div>
     );
 
@@ -124,7 +124,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <div className="space-y-4 sm:space-y-6 overflow-hidden">
                         {(section.summaryPillars || []).map((pillar, i) => (
                             <div key={i} className="flex items-start gap-3 sm:gap-6 p-4 sm:p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow duration-300 group">
-                                <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center text-lg sm:text-2xl font-bold text-white shadow-md transform group-hover:scale-110 transition-transform duration-300 flex-shrink-0" style={bgPrimaryStyle}>
+                                <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center text-lg sm:text-2xl font-bold text-white shadow-md transform group-hover:scale-110 transition-transform duration-300 shrink-0" style={bgPrimaryStyle}>
                                     {pillar.icon === '1' && <Target size={28} />}
                                     {pillar.icon === '2' && <Zap size={28} />}
                                     {pillar.icon === '3' && <Star size={28} />}
@@ -132,7 +132,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <h4 className="text-base sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2">{pillar.title}</h4>
-                                    <p className="text-sm sm:text-base text-gray-500 leading-snug break-words">{pillar.description}</p>
+                                    <p className="text-sm sm:text-base text-gray-500 leading-snug wrap-break-word">{pillar.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -148,7 +148,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                             <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">NO IMAGE</div>
                         )}
                         {/* Overlay Text */}
-                        <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent text-white">
+                        <div className="absolute bottom-0 left-0 right-0 p-8 bg-linear-to-t from-black/80 to-transparent text-white">
                             <p className="font-bold text-lg uppercase tracking-wider">Our Commitment</p>
                             <p className="text-sm opacity-80">Building foundations for the future.</p>
                         </div>
@@ -159,7 +159,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
     );
 
     const Story = ({ section }: { section: StorySection }) => (
-        <SectionContainer className="justify-center items-center text-center !p-32">
+        <SectionContainer className="justify-center items-center text-center p-32!">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: `radial-gradient(${getPrimaryColor()} 2px, transparent 2px)`, backgroundSize: '30px 30px' }}></div>
 
@@ -182,7 +182,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 {section.image && (
                     <div className="w-full h-96 rounded-3xl overflow-hidden shadow-2xl mt-12 relative group">
                         <img src={section.image} alt="Story" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-8 py-4 rounded-xl shadow-lg text-center">
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-8 py-4 rounded-xl shadow-lg text-center">
                             <p className="font-bold text-gray-900">{section.quote || "Our Shared Vision"}</p>
                         </div>
                     </div>
@@ -204,7 +204,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <div className="space-y-6">
                         {section.points.map((point, i) => (
                             <div key={i} className="flex gap-6 items-start">
-                                <div className="mt-1 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold" style={bgSecondaryStyle}>
+                                <div className="mt-1 w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white font-bold" style={bgSecondaryStyle}>
                                     {i + 1}
                                 </div>
                                 <div>
@@ -220,7 +220,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     {section.image ? (
                         <div className="absolute inset-0">
                             <img src={section.image} alt="Problem" className="w-full h-full object-cover opacity-80 mix-blend-multiply" />
-                            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40"></div>
+                            <div className="absolute inset-0 bg-linear-to-br from-transparent to-black/40"></div>
                         </div>
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -240,13 +240,13 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 {/* Left Column: List */}
                 <div className="col-span-1 lg:col-span-8 flex flex-col gap-4 sm:gap-8 overflow-hidden">
                     {section.elements.map((el, i) => (
-                        <div key={i} className="bg-white p-4 sm:p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-300 transition-all duration-300 relative overflow-hidden group">
+                        <div key={i} className="bg-white p-4 sm:p-8 rounded-2xl shadow-xs border border-gray-100 hover:border-gray-300 transition-all duration-300 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                 <h4 className="text-9xl font-black text-gray-900">{i + 1}</h4>
                             </div>
 
                             <div className="relative z-10 flex gap-6">
-                                <div className="w-2 h-24 rounded-full flex-shrink-0" style={bgPrimaryStyle}></div>
+                                <div className="w-2 h-24 rounded-full shrink-0" style={bgPrimaryStyle}></div>
                                 <div className="flex-1">
                                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{el.title}</h3>
                                     <p className="text-gray-600 mb-6 font-medium">{el.description}</p>
@@ -313,11 +313,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 {/* Print view */}
                 <div className="hidden print:flex w-full h-full flex-col items-center justify-center text-center">
                     <div className="grid grid-cols-2 gap-3 sm:gap-8 w-full max-w-lg mx-auto">
-                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center">
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-xs flex flex-col items-center justify-center">
                             <div className="text-2xl sm:text-4xl font-black text-gray-900 mb-1 sm:mb-2">${costPerScholarship.toLocaleString()}</div>
                             <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">Cost per Scholarship</div>
                         </div>
-                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center">
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-xs flex flex-col items-center justify-center">
                             <div className="text-2xl sm:text-4xl font-black text-gray-900 mb-1 sm:mb-2">${costPerServiceHour.toLocaleString()}</div>
                             <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">Cost per Service Hour</div>
                         </div>
@@ -482,7 +482,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const Investment = ({ section }: { section: InvestmentSection }) => (
         <SectionContainer className="justify-center items-center">
-            <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+            <div className="absolute inset-x-0 top-0 h-2 bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
 
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-16">
@@ -490,7 +490,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <p className="text-xl text-gray-500">Partnership Commitment</p>
                 </div>
 
-                <div className="bg-white rounded-2xl sm:rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden relative">
+                <div className="bg-white rounded-2xl sm:rounded-4xl shadow-2xl border border-gray-100 overflow-hidden relative">
                     <div className="h-4 w-full" style={bgPrimaryStyle}></div>
                     <div className="p-4 sm:p-8 md:p-16 flex flex-col gap-6 sm:gap-10">
                         {section.elements.map((el, i) => (
@@ -569,9 +569,9 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     {(section.steps || []).map((step: any, i: number) => (
                         <div key={i} className={`flex flex-col md:flex-row gap-8 md:gap-16 items-center ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                             <div className="hidden md:block w-1/2"></div>
-                            <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full border-4 border-white shadow transform -translate-x-1/2" style={bgPrimaryStyle}></div>
+                            <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full border-4 border-white shadow-sm transform -translate-x-1/2" style={bgPrimaryStyle}></div>
                             <div className={`w-full md:w-1/2 pl-20 md:pl-0 ${i % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16'}`}>
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative group hover:shadow-lg transition-shadow">
+                                <div className="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 relative group hover:shadow-lg transition-shadow">
                                     <span className="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-3" style={bgPrimaryStyle}>
                                         {step.date}
                                     </span>
@@ -607,7 +607,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-4">
                         <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-                            <div className="w-0 h-0 border-t-8 border-t-transparent border-l-[12px] border-l-white border-b-8 border-b-transparent ml-1"></div>
+                            <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent ml-1"></div>
                         </div>
                         <p className="font-medium tracking-widest uppercase text-sm opacity-50">No Video URL Provided</p>
                     </div>
@@ -633,7 +633,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     </div>
                 </div>
 
-                <div className="w-full md:w-5/12 aspect-[4/5] md:aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-900 relative shrink-0">
+                <div className="w-full md:w-5/12 aspect-4/5 md:aspect-3/4 rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-900 relative shrink-0">
                     {section.videoUrl ? (
                         <iframe
                             src={getEmbedUrl(section.videoUrl)}
@@ -645,7 +645,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-4 bg-gray-800">
                             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                                <div className="w-0 h-0 border-t-6 border-t-transparent border-l-[10px] border-l-white border-b-6 border-b-transparent ml-1"></div>
+                                <div className="w-0 h-0 border-t-6 border-t-transparent border-l-10 border-l-white border-b-6 border-b-transparent ml-1"></div>
                             </div>
                             <p className="font-medium tracking-widest uppercase text-[10px] opacity-50">Add Video URL</p>
                         </div>
@@ -669,8 +669,8 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 )}
                 {/* Geometric Accent */}
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-                    <div className="absolute -top-1/2 -right-1/2 w-[100%] h-[100%] border-[2px] border-white/20 rounded-full"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] border-[1px] border-white/10 rounded-full"></div>
+                    <div className="absolute -top-1/2 -right-1/2 w-full h-full border-2 border-white/20 rounded-full"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] border border-white/10 rounded-full"></div>
                 </div>
             </div>
 
