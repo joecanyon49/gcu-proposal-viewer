@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
-import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, BackCoverSection } from '@/types/proposal';
+import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, BackCoverSection, VideoShowcaseSection, VideoStorySection } from '@/types/proposal';
 import clsx from 'clsx';
-import { Quote, CheckCircle2, Star, Target, Zap, Layout, TrendingUp, DollarSign, Calculator } from 'lucide-react';
+import { Quote, CheckCircle2, Star, Target, Zap, Layout, TrendingUp, DollarSign, Calculator, User } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, Area, AreaChart } from 'recharts';
 
-const MAIN_PORTAL_URL = 'https://gcu-development-portal.vercel.app';
 
 const Preview = ({ data }: { data: ProposalData }) => {
 
@@ -16,6 +15,14 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const getTextColor = () => data.theme.textColor || '#000000';
     const getBgColor = () => data.theme.backgroundColor || '#FFFFFF';
     const getFont = () => data.theme.fontFamily || 'sans-serif';
+
+    // Helper to get embeddable YouTube URLs
+    const getEmbedUrl = (url: string) => {
+        if (!url) return '';
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : url;
+    };
 
     const primaryStyle = { color: getPrimaryColor() };
     const bgPrimaryStyle = { backgroundColor: getPrimaryColor() };
@@ -57,7 +64,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image && (
-                    <img src={section.image.startsWith('/') ? `${MAIN_PORTAL_URL}${section.image}` : section.image} alt="Cover" className="w-full h-full object-cover" />
+                    <img src={section.image} alt="Cover" className="w-full h-full object-cover" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
                 {/* Accent Overlay */}
@@ -136,7 +143,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <div className="absolute inset-0 rounded-[4rem] transform rotate-3 opacity-20" style={bgPrimaryStyle}></div>
                     <div className="relative h-full w-full rounded-[4rem] overflow-hidden shadow-2xl border-8 border-white">
                         {section.image ? (
-                            <img src={section.image.startsWith('/') ? `${MAIN_PORTAL_URL}${section.image}` : section.image} alt="Synopsis" className="w-full h-full object-cover" />
+                            <img src={section.image} alt="Synopsis" className="w-full h-full object-cover" />
                         ) : (
                             <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">NO IMAGE</div>
                         )}
@@ -174,7 +181,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
                 {section.image && (
                     <div className="w-full h-96 rounded-3xl overflow-hidden shadow-2xl mt-12 relative group">
-                        <img src={section.image.startsWith('/') ? `${MAIN_PORTAL_URL}${section.image}` : section.image} alt="Story" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                        <img src={section.image} alt="Story" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-8 py-4 rounded-xl shadow-lg text-center">
                             <p className="font-bold text-gray-900">{section.quote || "Our Shared Vision"}</p>
                         </div>
@@ -212,7 +219,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 <div className="relative h-full min-h-[500px] w-full bg-gray-100 rounded-[3rem] overflow-hidden shadow-inner">
                     {section.image ? (
                         <div className="absolute inset-0">
-                            <img src={section.image.startsWith('/') ? `${MAIN_PORTAL_URL}${section.image}` : section.image} alt="Problem" className="w-full h-full object-cover opacity-80 mix-blend-multiply" />
+                            <img src={section.image} alt="Problem" className="w-full h-full object-cover opacity-80 mix-blend-multiply" />
                             <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40"></div>
                         </div>
                     ) : (
@@ -261,7 +268,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 <div className="col-span-0 lg:col-span-4 hidden lg:flex flex-col gap-6">
                     <div className="flex-1 bg-gray-900 rounded-3xl overflow-hidden relative text-white p-10 flex flex-col justify-end shadow-2xl">
                         {section.image && (
-                            <img src={section.image.startsWith('/') ? `${MAIN_PORTAL_URL}${section.image}` : section.image} className="absolute inset-0 w-full h-full object-cover opacity-60" alt="Sidebar" />
+                            <img src={section.image} className="absolute inset-0 w-full h-full object-cover opacity-60" alt="Sidebar" />
                         )}
                         <div className="relative z-10">
                             <h4 className="text-3xl font-bold mb-4">Scope Summary</h4>
@@ -303,7 +310,21 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 data-primary-color={primaryColor}
                 className="flex flex-col items-center justify-center w-full h-full p-4 sm:p-8"
             >
-                <div className="w-full max-w-lg space-y-4 sm:space-y-8 animate-fade-in">
+                {/* Print view */}
+                <div className="hidden print:flex w-full h-full flex-col items-center justify-center text-center">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-8 w-full max-w-lg mx-auto">
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center">
+                            <div className="text-2xl sm:text-4xl font-black text-gray-900 mb-1 sm:mb-2">${costPerScholarship.toLocaleString()}</div>
+                            <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">Cost per Scholarship</div>
+                        </div>
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center">
+                            <div className="text-2xl sm:text-4xl font-black text-gray-900 mb-1 sm:mb-2">${costPerServiceHour.toLocaleString()}</div>
+                            <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">Cost per Service Hour</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="w-full max-w-lg space-y-4 sm:space-y-8 animate-fade-in print:hidden">
                     <div className="space-y-3 sm:space-y-6">
                         <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end sm:gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
                             <span>Contribution</span>
@@ -508,15 +529,24 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const Team = ({ section }: { section: any }) => (
         <SectionContainer>
             <SectionHeader title={section.title} subtitle="Meet the Experts" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4">
                 {(section.members || []).map((member: any, i: number) => (
                     <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 group hover:-translate-y-2 transition-transform duration-300">
                         <div className="h-24 bg-gray-100 relative overflow-hidden">
                             <div className="absolute inset-0 opacity-20" style={bgPrimaryStyle}></div>
                         </div>
                         <div className="px-6 relative">
-                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-md -mt-12 overflow-hidden bg-gray-200 mx-auto">
-                                <img src={member.image || `${MAIN_PORTAL_URL}/assets/proposal/avatar-placeholder.jpg`} className="w-full h-full object-cover" />
+                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-md -mt-12 overflow-hidden bg-white mx-auto flex items-center justify-center">
+                                <img
+                                    src={(!member.image || member.image === "/assets/proposal/avatar-placeholder.jpg")
+                                        ? "/team-placeholder.png"
+                                        : member.image}
+                                    className={`w-full h-full object-cover ${(!member.image || member.image.includes('placeholder')) ? 'scale-110' : 'scale-110'}`}
+                                    onError={(e) => {
+                                        // Keep base64 ONLY as a catastrophic fallback
+                                        e.currentTarget.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==";
+                                    }}
+                                />
                             </div>
                         </div>
                         <div className="p-6 text-center">
@@ -556,12 +586,81 @@ const Preview = ({ data }: { data: ProposalData }) => {
         </SectionContainer>
     );
 
+    // --- VIDEO SECTIONS ---
+    const VideoShowcase = ({ section }: { section: VideoShowcaseSection }) => (
+        <SectionContainer className="print:hidden">
+            <div className="text-center max-w-3xl mx-auto mb-10">
+                <h3 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h3>
+                {section.description && <p className="text-gray-600 text-lg leading-relaxed">{section.description}</p>}
+                <div className="w-16 h-1 mt-6 mx-auto rounded-full" style={bgPrimaryStyle}></div>
+            </div>
+
+            <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-gray-900 relative">
+                {section.videoUrl ? (
+                    <iframe
+                        src={getEmbedUrl(section.videoUrl)}
+                        title={section.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full absolute inset-0"
+                    ></iframe>
+                ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-4">
+                        <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
+                            <div className="w-0 h-0 border-t-8 border-t-transparent border-l-[12px] border-l-white border-b-8 border-b-transparent ml-1"></div>
+                        </div>
+                        <p className="font-medium tracking-widest uppercase text-sm opacity-50">No Video URL Provided</p>
+                    </div>
+                )}
+            </div>
+        </SectionContainer>
+    );
+
+    const VideoStory = ({ section }: { section: VideoStorySection }) => (
+        <SectionContainer className="print:hidden">
+            <div className="flex flex-col md:flex-row gap-12 items-center">
+                <div className="flex-1 space-y-6">
+                    {section.subtitle && (
+                        <h4 className="text-sm font-bold uppercase tracking-widest mb-2 border-l-4 pl-3" style={{ color: getPrimaryColor(), borderColor: getPrimaryColor() }}>
+                            {section.subtitle}
+                        </h4>
+                    )}
+                    <h3 className="text-4xl font-bold text-gray-900 leading-tight">{section.title}</h3>
+                    <div className="prose prose-lg text-gray-600 leading-relaxed max-w-none prose-p:mb-4">
+                        {section.content.split('\n').map((paragraph: string, i: number) => (
+                            <p key={i}>{paragraph}</p>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="w-full md:w-5/12 aspect-[4/5] md:aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-900 relative shrink-0">
+                    {section.videoUrl ? (
+                        <iframe
+                            src={getEmbedUrl(section.videoUrl)}
+                            title={section.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full absolute inset-0 object-cover"
+                        ></iframe>
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-4 bg-gray-800">
+                            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                                <div className="w-0 h-0 border-t-6 border-t-transparent border-l-[10px] border-l-white border-b-6 border-b-transparent ml-1"></div>
+                            </div>
+                            <p className="font-medium tracking-widest uppercase text-[10px] opacity-50">Add Video URL</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </SectionContainer>
+    );
+
     const BackCover = ({ section, meta }: { section: BackCoverSection, meta: any }) => (
         <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-center p-6 sm:p-10 md:p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getFont() }}>
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image ? (
-                    <img src={section.image.startsWith('/') ? `${MAIN_PORTAL_URL}${section.image}` : section.image} alt="Back Cover" className="w-full h-full object-cover" />
+                    <img src={section.image} alt="Back Cover" className="w-full h-full object-cover" />
                 ) : (
                     <div className="absolute inset-0" style={bgPrimaryStyle}></div>
                 )}
@@ -623,6 +722,8 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     {section.type === 'content' && <Content section={section as ContentSection} />}
                     {section.type === 'impact' && <Impact section={section as ImpactSection} />}
                     {section.type === 'investment' && <Investment section={section as InvestmentSection} />}
+                    {section.type === 'video_showcase' && <VideoShowcase section={section as VideoShowcaseSection} />}
+                    {section.type === 'video_story' && <VideoStory section={section as VideoStorySection} />}
                     {section.type === 'back_cover' && <BackCover section={section as BackCoverSection} meta={data.meta} />}
                     {section.type === 'team' && <Team section={section} />}
                     {section.type === 'timeline' && <Timeline section={section} />}
