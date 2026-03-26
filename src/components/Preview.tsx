@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, BackCoverSection, VideoShowcaseSection, VideoStorySection } from '@/types/proposal';
+import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, CommitmentSection, TextBlockSection, BackCoverSection, VideoShowcaseSection, VideoStorySection } from '@/types/proposal';
 import clsx from 'clsx';
 import { Quote, CheckCircle2, Star, Target, Zap, Layout, TrendingUp, DollarSign, Calculator, User } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, Area, AreaChart } from 'recharts';
@@ -655,6 +655,38 @@ const Preview = ({ data }: { data: ProposalData }) => {
         </SectionContainer>
     );
 
+    const Commitment = ({ section }: { section: CommitmentSection }) => (
+        <SectionContainer className="justify-center">
+            <SectionHeader title={section.title} />
+            <div className="max-w-3xl mx-auto w-full space-y-8 flex-1 flex flex-col justify-center">
+                {section.image && (
+                    <div className="w-full h-48 rounded-2xl overflow-hidden shadow-lg">
+                        <img src={section.image} alt="" className="w-full h-full object-cover" />
+                    </div>
+                )}
+                <div className="bg-gray-50 border-l-4 p-8 rounded-r-2xl" style={{ borderColor: getPrimaryColor() }}>
+                    <h3 className="text-2xl font-bold mb-4" style={{ color: getPrimaryColor() }}>
+                        {section.commitmentTitle || 'Partnership Commitment'}
+                    </h3>
+                    <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">
+                        {section.commitmentText}
+                    </p>
+                </div>
+            </div>
+        </SectionContainer>
+    );
+
+    const TextBlock = ({ section }: { section: TextBlockSection }) => (
+        <SectionContainer>
+            {section.title && <SectionHeader title={section.title} />}
+            <div className="flex-1 flex items-center justify-center">
+                <div className="w-full max-w-3xl">
+                    <p className="text-xl text-gray-700 leading-relaxed whitespace-pre-wrap">{section.content}</p>
+                </div>
+            </div>
+        </SectionContainer>
+    );
+
     const BackCover = ({ section, meta }: { section: BackCoverSection, meta: any }) => (
         <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-center p-6 sm:p-10 md:p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getFont() }}>
             {/* Background */}
@@ -724,6 +756,8 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     {section.type === 'investment' && <Investment section={section as InvestmentSection} />}
                     {section.type === 'video_showcase' && <VideoShowcase section={section as VideoShowcaseSection} />}
                     {section.type === 'video_story' && <VideoStory section={section as VideoStorySection} />}
+                    {section.type === 'commitment' && <Commitment section={section as CommitmentSection} />}
+                    {section.type === 'text_block' && <TextBlock section={section as TextBlockSection} />}
                     {section.type === 'back_cover' && <BackCover section={section as BackCoverSection} meta={data.meta} />}
                     {section.type === 'team' && <Team section={section} />}
                     {section.type === 'timeline' && <Timeline section={section} />}

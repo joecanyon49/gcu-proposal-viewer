@@ -129,6 +129,20 @@ export interface InvestmentSection extends SectionBase {
     elements: PricingItem[];
 }
 
+export interface CommitmentSection extends SectionBase {
+    type: 'commitment';
+    title: string;
+    commitmentTitle: string;
+    commitmentText: string;
+    image?: string;
+}
+
+export interface TextBlockSection extends SectionBase {
+    type: 'text_block';
+    title?: string;
+    content: string;
+}
+
 export interface VideoShowcaseSection extends SectionBase {
     type: 'video_showcase';
     title: string;
@@ -179,7 +193,7 @@ export interface TimelineSection extends SectionBase {
     steps: TimelineStep[];
 }
 
-export type ProposalSection = CoverSection | SynopsisSection | StorySection | ProblemSection | ContentSection | ImpactSection | InvestmentSection | TeamSection | TimelineSection | BackCoverSection | VideoShowcaseSection | VideoStorySection;
+export type ProposalSection = CoverSection | SynopsisSection | StorySection | ProblemSection | ContentSection | ImpactSection | InvestmentSection | CommitmentSection | TextBlockSection | TeamSection | TimelineSection | BackCoverSection | VideoShowcaseSection | VideoStorySection;
 export interface ProposalData {
     meta: ProposalMeta;
     theme: ProposalTheme;
