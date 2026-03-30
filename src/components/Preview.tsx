@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, CommitmentSection, TextBlockSection, BackCoverSection, VideoShowcaseSection, VideoStorySection } from '@/types/proposal';
+import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, CommitmentSection, TextBlockSection, BackCoverSection, VideoShowcaseSection, VideoStorySection, TableSection, TestimonialSection, DataVisualizationSection, KpiSection, ComparisonSection } from '@/types/proposal';
 import clsx from 'clsx';
-import { Quote, CheckCircle2, Star, Target, Zap, Layout, TrendingUp, DollarSign, Calculator, User } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, Area, AreaChart } from 'recharts';
+import { Quote, CheckCircle2, Star, Target, Zap, Layout, TrendingUp, DollarSign, Calculator, User, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, Area, AreaChart, LineChart, Line, RadarChart, Radar, PolarGrid, PolarAngleAxis } from 'recharts';
 
 
 const Preview = ({ data }: { data: ProposalData }) => {
@@ -14,7 +14,8 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const getSecondaryColor = () => data.theme.secondaryColor || '#E0E0E0';
     const getTextColor = () => data.theme.textColor || '#000000';
     const getBgColor = () => data.theme.backgroundColor || '#FFFFFF';
-    const getFont = () => data.theme.fontFamily || 'sans-serif';
+    const getHeadingFont = () => data.theme.headingFontFamily || data.theme.fontFamily || "'Graduate', sans-serif";
+    const getBodyFont = () => data.theme.bodyFontFamily || data.theme.fontFamily || "'Inter', sans-serif";
 
     // Helper to get embeddable YouTube URLs
     const getEmbedUrl = (url: string) => {
@@ -35,7 +36,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
         <div className={clsx(
             "relative w-full min-h-screen md:min-h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page print:break-before-page overflow-hidden",
             className
-        )} style={{ fontFamily: getFont(), backgroundColor: getBgColor(), color: getTextColor() }}>
+        )} style={{ fontFamily: getBodyFont(), backgroundColor: getBgColor(), color: getTextColor() }}>
             {children}
         </div>
     );
@@ -60,7 +61,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
     // --- SECTIONS ---
 
     const Cover = ({ section, meta }: { section: CoverSection, meta: any }) => (
-        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-end p-6 sm:p-10 md:p-20 break-before-page text-white overflow-hidden" style={{ fontFamily: getFont() }}>
+        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-end p-6 sm:p-10 md:p-20 break-before-page text-white overflow-hidden" style={{ fontFamily: getHeadingFont() }}>
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image && (
@@ -688,7 +689,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
     );
 
     const BackCover = ({ section, meta }: { section: BackCoverSection, meta: any }) => (
-        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-center p-6 sm:p-10 md:p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getFont() }}>
+        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-center p-6 sm:p-10 md:p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getHeadingFont() }}>
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image ? (
@@ -739,11 +740,110 @@ const Preview = ({ data }: { data: ProposalData }) => {
         </div>
     );
 
+    const COLORS = ['#522398', '#CFB53B', '#7a4bc8', '#3a176e', '#E0E0E0', '#4ade80', '#f97316', '#06b6d4'];
+
+    const TableRenderer = ({ section }: { section: TableSection }) => (
+        <div className={clsx("relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page")} style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
+            <div className="mb-6 relative z-10 shrink-0">
+                <div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div>
+                <h2 className="text-3xl md:text-4xl font-extrabold uppercase tracking-tight leading-none" style={primaryStyle}>{section.title}</h2>
+                {section.subtitle && <p className="text-base md:text-lg font-light opacity-60 max-w-2xl mt-2">{section.subtitle}</p>}
+            </div>
+            <div className="flex-1 overflow-auto">
+                <table className="w-full border-collapse text-sm">
+                    {section.columns && section.columns.length > 0 && <thead><tr>{section.columns.map((h: string, i: number) => <th key={i} className="text-left px-4 py-3 font-bold border-b-2 text-white text-xs uppercase tracking-wider" style={bgPrimaryStyle}>{h}</th>)}</tr></thead>}
+                    <tbody>{(section.rows || []).map((row: string[], ri: number) => <tr key={ri} className={ri % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>{row.map((cell: string, ci: number) => <td key={ci} className="px-4 py-2.5 border-b border-gray-100">{cell}</td>)}</tr>)}</tbody>
+                </table>
+            </div>
+        </div>
+    );
+
+    const TestimonialRenderer = ({ section }: { section: TestimonialSection }) => (
+        <div className={clsx("relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page")} style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
+            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2>{section.subtitle && <p className="text-lg text-gray-500 mt-1">{section.subtitle}</p>}</div>}
+            <div className="flex-1 grid grid-cols-2 gap-8 relative z-10">
+                {(section.quotes || []).map((quote, i) => (
+                    <div key={i} className="flex flex-col bg-gray-50 rounded-2xl p-8 border border-gray-100">
+                        <Quote size={32} className="mb-4 opacity-20" style={{ color: getPrimaryColor() }} />
+                        <p className="text-lg italic flex-1 leading-relaxed">{quote.text}</p>
+                        <div className="mt-6 flex items-center gap-3">
+                            {quote.image && <img src={quote.image} className="w-10 h-10 rounded-full object-cover" alt={quote.author} />}
+                            <div>
+                                <p className="font-bold text-sm" style={primaryStyle}>{quote.author}</p>
+                                {quote.role && <p className="text-xs text-gray-500">{quote.role}</p>}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    const DataVisualizationRenderer = ({ section }: { section: DataVisualizationSection }) => {
+        const gridClass = section.layout === 'grid-4' ? 'grid-cols-2' : section.layout === 'grid-2' ? 'grid-cols-2' : 'grid-cols-1';
+        const renderChart = (graph: any) => {
+            switch (graph.type) {
+                case 'bar': return <ResponsiveContainer width="100%" height="100%"><BarChart data={graph.data}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="name" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><Tooltip /><Bar dataKey="value" fill={getPrimaryColor()} /></BarChart></ResponsiveContainer>;
+                case 'horizontal_bar': return <ResponsiveContainer width="100%" height="100%"><BarChart data={graph.data} layout="vertical"><CartesianGrid strokeDasharray="3 3" /><XAxis type="number" tick={{ fontSize: 11 }} /><YAxis dataKey="name" type="category" tick={{ fontSize: 11 }} width={80} /><Tooltip /><Bar dataKey="value" fill={getPrimaryColor()} /></BarChart></ResponsiveContainer>;
+                case 'pie': return <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={graph.data} cx="50%" cy="50%" outerRadius="60%" dataKey="value" label={({ name, percent }: { name?: string; percent?: number }) => `${name ?? ''} ${((percent ?? 0)*100).toFixed(0)}%`}>{graph.data.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer>;
+                case 'donut': return <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={graph.data} cx="50%" cy="50%" innerRadius="40%" outerRadius="60%" dataKey="value">{graph.data.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><Tooltip /><Legend /></PieChart></ResponsiveContainer>;
+                case 'line': return <ResponsiveContainer width="100%" height="100%"><LineChart data={graph.data}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="name" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><Tooltip /><Line type="monotone" dataKey="value" stroke={getPrimaryColor()} strokeWidth={2} dot={false} /></LineChart></ResponsiveContainer>;
+                case 'radar': return <ResponsiveContainer width="100%" height="100%"><RadarChart data={graph.data}><PolarGrid /><PolarAngleAxis dataKey="name" tick={{ fontSize: 11 }} /><Radar dataKey="value" stroke={getPrimaryColor()} fill={getPrimaryColor()} fillOpacity={0.4} /></RadarChart></ResponsiveContainer>;
+                default: return null;
+            }
+        };
+        return (
+            <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page" style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
+                {section.title && <div className="mb-6 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2></div>}
+                <div className={`flex-1 grid ${gridClass} gap-6`}>
+                    {(section.charts || []).map((graph: any, i: number) => (
+                        <div key={i} className="flex flex-col">
+                            {graph.title && <h3 className="text-sm font-bold mb-2 text-center">{graph.title}</h3>}
+                            <div className="flex-1" style={{ minHeight: 200 }}>{renderChart(graph)}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    const KpiRenderer = ({ section }: { section: KpiSection }) => (
+        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page" style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
+            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2></div>}
+            <div className={`grid grid-cols-2 md:grid-cols-${Math.min(section.metrics?.length || 2, 4)} gap-4 flex-1`}>
+                {(section.metrics || []).map((m: any, i: number) => (
+                    <div key={i} className="rounded-2xl p-6 flex flex-col justify-between border" style={{ borderColor: getPrimaryColor() + '30', background: getPrimaryColor() + '08' }}>
+                        <div className="text-sm font-semibold opacity-70 mb-2">{m.label}</div>
+                        <div className="text-4xl font-black mb-2" style={primaryStyle}>{m.value}</div>
+                        {m.change !== undefined && <div className={`flex items-center gap-1 text-sm font-bold ${m.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>{m.change >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}{Math.abs(m.change)}%</div>}
+                        {m.description && <p className="text-xs opacity-60 mt-1">{m.description}</p>}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    const ComparisonRenderer = ({ section }: { section: ComparisonSection }) => (
+        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page" style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
+            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2></div>}
+            <div className={`grid grid-cols-${section.columns?.length || 2} gap-4 flex-1`}>
+                {(section.columns || []).map((col: any, ci: number) => (
+                    <div key={ci} className={`rounded-2xl p-6 flex flex-col border-2 ${ci === 0 ? 'border-gray-200' : ''}`} style={ci > 0 ? { borderColor: getPrimaryColor() } : {}}>
+                        {col.highlighted && <div className="text-[10px] font-black uppercase tracking-widest mb-2 px-2 py-0.5 rounded self-start text-white" style={bgPrimaryStyle}>Recommended</div>}
+                        <h3 className="text-lg font-bold mb-1">{col.name}</h3>
+                        {col.price && <div className="text-3xl font-black mb-4" style={primaryStyle}>{col.price}</div>}
+                        <ul className="space-y-2 flex-1">{(col.items || []).map((item: string, i: number) => <li key={i} className="flex items-start gap-2 text-sm"><CheckCircle2 size={14} className="mt-0.5 shrink-0" style={primaryStyle} />{item}</li>)}</ul>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
     // --- MAIN RENDER ---
     return (
-        <div className="w-full max-w-full md:max-w-[816px] mx-auto bg-white shadow-none md:shadow-2xl my-0 md:my-10 overflow-hidden print:w-full print:max-w-none print:shadow-none print:my-0">
+        <div className="preview-container w-full max-w-full md:max-w-[816px] mx-auto bg-white shadow-none md:shadow-2xl my-0 md:my-10 overflow-hidden print:w-full print:max-w-none print:shadow-none print:my-0">
             <style>
-                {`@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;600;800&family=Open+Sans:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap');`}
+                {`@import url('https://fonts.googleapis.com/css2?family=Graduate&family=Inter:wght@300;400;600;800&family=Lato:wght@300;400;700&family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600;800&family=Open+Sans:wght@300;400;600;800&family=Oswald:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600;700&family=Raleway:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');`}
             </style>
             {data.sections.map((section) => (
                 <div key={section.id} data-section-id={section.id}>
@@ -761,6 +861,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     {section.type === 'back_cover' && <BackCover section={section as BackCoverSection} meta={data.meta} />}
                     {section.type === 'team' && <Team section={section} />}
                     {section.type === 'timeline' && <Timeline section={section} />}
+                    {section.type === 'table' && <TableRenderer section={section as TableSection} />}
+                    {section.type === 'testimonial' && <TestimonialRenderer section={section as TestimonialSection} />}
+                    {section.type === 'data_visualization' && <DataVisualizationRenderer section={section as DataVisualizationSection} />}
+                    {section.type === 'kpi' && <KpiRenderer section={section as KpiSection} />}
+                    {section.type === 'comparison' && <ComparisonRenderer section={section as ComparisonSection} />}
                 </div>
             ))}
         </div>

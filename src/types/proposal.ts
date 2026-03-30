@@ -4,8 +4,14 @@ export interface ProposalTheme {
     secondaryColor: string;
     textColor: string;
     backgroundColor: string;
-    fontFamily: string;
+    fontFamily: string; // Deprecated - use bodyFontFamily
+    headingFontFamily?: string;
+    bodyFontFamily?: string;
+    headingFontSize?: 'sm' | 'md' | 'lg' | 'xl';
+    bodyFontSize?: 'sm' | 'md' | 'lg';
     overlayOpacity?: number; // 0 to 1
+    borderStyle?: 'none' | 'subtle' | 'accent';
+    sectionDivider?: 'none' | 'line' | 'gradient' | 'wave';
 }
 
 export interface ProposalMeta {
@@ -21,6 +27,17 @@ export interface ProposalMeta {
 export interface SectionBase {
     id: string; // Unique ID for React keys and reordering
     type: string;
+    imagePosition?: string;        // CSS object-position value, e.g. "center top", "50% 30%"
+    imageOverlayColor?: string;    // overlay hex color
+    imageOverlayOpacity?: number;  // overlay opacity 0-1
+    colorOverride?: {
+        primary?: string;
+        background?: string;
+        text?: string;
+    };
+    layoutVariant?: string;        // section-specific layout variant
+    backgroundPattern?: 'none' | 'dots' | 'grid' | 'diagonal' | 'waves';
+    spacing?: 'compact' | 'normal' | 'spacious';
 }
 
 export interface CoverSection extends SectionBase {
@@ -33,16 +50,19 @@ export interface CoverSection extends SectionBase {
 export interface SummaryPillar {
     title: string;
     description: string;
-    icon: string; // '1', '2', '3'
+    icon: string; // '1', '2', '3', 'heart', 'shield', etc.
+    color?: string; // per-pillar accent color
 }
 
 // 1. Synopsis (formerly Executive Summary)
 export interface SynopsisSection extends SectionBase {
     type: 'synopsis';
     title: string;
+    subtitle?: string;
     content: string;
     summaryPillars: SummaryPillar[];
     image?: string;
+    // layoutVariant?: 'pillars-below' | 'pillars-right' | 'pillars-left'
 }
 
 // 2. Story (The "Why")
@@ -53,15 +73,18 @@ export interface StorySection extends SectionBase {
     content: string;
     image?: string;
     quote?: string;
+    // layoutVariant?: 'left-image' | 'right-image' | 'full-bleed' | 'centered'
 }
 
 // 3. Problem (The "Gap" or "Need")
 export interface ProblemSection extends SectionBase {
     type: 'problem';
     title: string;
+    subtitle?: string;
     description: string;
     points: { title: string; description: string }[];
     image?: string;
+    // layoutVariant?: 'cards' | 'numbered-list' | 'split-image'
 }
 
 // 4. Content (Formerly Scope of Work / The "What")
@@ -74,8 +97,10 @@ export interface Deliverable {
 export interface ContentSection extends SectionBase {
     type: 'content';
     title: string;
+    subtitle?: string;
     elements: Deliverable[];
     image?: string;
+    // layoutVariant?: 'grid-2' | 'grid-3' | 'stacked'
 }
 
 // 5. Impact Charts (Formerly Stats)
@@ -92,9 +117,16 @@ export interface GraphDataPoint {
     [key: string]: any;
 }
 
+export interface GraphDataSeries {
+    key: string;
+    label: string;
+    color?: string;
+}
+
 export interface GraphData {
-    type: 'bar' | 'pie' | 'line';
+    type: 'bar' | 'pie' | 'line' | 'donut' | 'radar' | 'horizontal_bar' | 'stacked_bar' | 'gauge';
     data: GraphDataPoint[];
+    series?: GraphDataSeries[];  // For multi-series charts (stacked bar, etc.)
     yAxisLabel?: string;
     xAxisLabel?: string;
 }
@@ -105,15 +137,21 @@ export interface ImpactCalculatorConfig {
     minDonation?: number;
     maxDonation?: number;
     step?: number;
+    scholarshipLabel?: string;
+    serviceHourLabel?: string;
+    scholarshipFundedLabel?: string;
+    serviceHourFundedLabel?: string;
 }
 
 export interface ImpactSection extends SectionBase {
     type: 'impact';
     title: string;
+    subtitle?: string;
     displayType: 'stats' | 'graph';
     stats: StatItem[];
     graph?: GraphData;
     calculator?: ImpactCalculatorConfig;
+    pledgeYears?: number;
 }
 
 // 6. Proposal (Formerly Pricing / Investment)
@@ -126,6 +164,7 @@ export interface PricingItem {
 export interface InvestmentSection extends SectionBase {
     type: 'investment';
     title: string;
+    subtitle?: string;
     elements: PricingItem[];
 }
 
@@ -178,6 +217,7 @@ export interface TeamSection extends SectionBase {
     title: string;
     subtitle?: string;
     members: TeamMember[];
+    // layoutVariant?: 'grid' | 'list' | 'carousel'
 }
 
 export interface TimelineStep {
@@ -193,7 +233,75 @@ export interface TimelineSection extends SectionBase {
     steps: TimelineStep[];
 }
 
-export type ProposalSection = CoverSection | SynopsisSection | StorySection | ProblemSection | ContentSection | ImpactSection | InvestmentSection | CommitmentSection | TextBlockSection | TeamSection | TimelineSection | BackCoverSection | VideoShowcaseSection | VideoStorySection;
+// Table / Data section
+export interface TableSection extends SectionBase {
+    type: 'table';
+    title: string;
+    subtitle?: string;
+    columns: string[];
+    rows: string[][];
+    highlightHeader?: boolean;
+    styleVariant?: 'default' | 'striped' | 'bordered' | 'minimal';
+}
+
+// Testimonial / Quote section
+export interface TestimonialQuote {
+    text: string;
+    author: string;
+    role?: string;
+    image?: string;
+}
+
+export interface TestimonialSection extends SectionBase {
+    type: 'testimonial';
+    title: string;
+    subtitle?: string;
+    quotes: TestimonialQuote[];
+}
+
+// --- NEW SECTION TYPES ---
+
+// Data Visualization section - multi-chart layout
+export interface DataVisualizationSection extends SectionBase {
+    type: 'data_visualization';
+    title: string;
+    subtitle?: string;
+    charts: GraphData[];
+    layout: 'single' | 'grid-2' | 'grid-4';
+}
+
+// KPI / Metrics section
+export interface KpiMetric {
+    label: string;
+    value: string;
+    change?: string;
+    changeDirection?: 'up' | 'down';
+    icon?: string;
+}
+
+export interface KpiSection extends SectionBase {
+    type: 'kpi';
+    title: string;
+    subtitle?: string;
+    metrics: KpiMetric[];
+    layout: 'row' | 'grid';
+}
+
+// Comparison section - side-by-side columns
+export interface ComparisonColumn {
+    heading: string;
+    highlighted?: boolean;
+    items: { label: string; value: string }[];
+}
+
+export interface ComparisonSection extends SectionBase {
+    type: 'comparison';
+    title: string;
+    subtitle?: string;
+    columns: ComparisonColumn[];
+}
+
+export type ProposalSection = CoverSection | SynopsisSection | StorySection | ProblemSection | ContentSection | ImpactSection | InvestmentSection | TeamSection | TimelineSection | BackCoverSection | VideoShowcaseSection | VideoStorySection | TableSection | TestimonialSection | CommitmentSection | TextBlockSection | DataVisualizationSection | KpiSection | ComparisonSection;
 export interface ProposalData {
     meta: ProposalMeta;
     theme: ProposalTheme;
