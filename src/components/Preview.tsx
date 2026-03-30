@@ -942,24 +942,26 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const KpiRenderer = ({ section }: { section: KpiSection }) => (
         <SectionContainer>
             <SectionHeader title={section.title} subtitle={section.subtitle} />
-            <div className={`flex-1 ${section.layout === 'row' ? 'flex flex-row flex-wrap items-stretch' : 'grid grid-cols-2 lg:grid-cols-4'} gap-4 md:gap-6 relative z-10`}>
-                {(section.metrics || []).map((metric, i) => (
-                    <div key={i} className={`${section.layout === 'row' ? 'flex-1 min-w-[150px]' : ''} bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col items-center justify-center overflow-hidden`} style={{ borderTop: `6px solid ${getPrimaryColor()}` }}>
-                        <div className="flex flex-col items-center justify-center gap-3 p-6 md:p-8 w-full h-full">
-                            {metric.icon && <div className="text-4xl mb-1">{metric.icon}</div>}
-                            <div className="text-4xl lg:text-5xl font-extrabold leading-none text-center break-words max-w-full" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
-                                {metric.value}
-                            </div>
-                            <div className="text-sm font-semibold text-gray-600 text-center uppercase tracking-wide leading-snug" style={{ fontFamily: getBodyFont() }}>{metric.label}</div>
-                            {metric.change && (
-                                <div className={`flex items-center gap-1 text-sm font-bold px-3 py-1 rounded-full whitespace-nowrap ${metric.changeDirection === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-red-600 bg-red-50'}`}>
-                                    {metric.changeDirection === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                                    {metric.change}
+            <div className="flex-1 flex flex-col justify-center relative z-10">
+                <div className={`${section.layout === 'row' ? 'flex flex-row flex-wrap justify-center' : 'grid grid-cols-2 lg:grid-cols-4'} gap-4 md:gap-6`}>
+                    {(section.metrics || []).map((metric, i) => (
+                        <div key={i} className={`${section.layout === 'row' ? 'flex-1 min-w-[150px]' : ''} bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col items-center justify-center overflow-hidden`} style={{ borderTop: `6px solid ${getPrimaryColor()}` }}>
+                            <div className="flex flex-col items-center justify-center gap-3 p-6 md:p-8 w-full">
+                                {metric.icon && <div className="text-4xl mb-1">{metric.icon}</div>}
+                                <div className="text-4xl lg:text-5xl font-extrabold leading-none text-center break-words max-w-full" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
+                                    {metric.value}
                                 </div>
-                            )}
+                                <div className="text-sm font-semibold text-gray-600 text-center uppercase tracking-wide leading-snug" style={{ fontFamily: getBodyFont() }}>{metric.label}</div>
+                                {metric.change && (
+                                    <div className={`flex items-center gap-1 text-sm font-bold px-3 py-1 rounded-full whitespace-nowrap ${metric.changeDirection === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-red-600 bg-red-50'}`}>
+                                        {metric.changeDirection === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                                        {metric.change}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </SectionContainer>
     );
