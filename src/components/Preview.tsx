@@ -699,34 +699,29 @@ const Preview = ({ data }: { data: ProposalData }) => {
             <SectionHeader title={section.title} subtitle="Investing in the Future" />
             
             <div className="flex-1 w-full flex flex-col items-center justify-center mt-4">
-                <div className="w-full max-w-6xl mx-auto rounded-[3rem] p-8 md:p-12 lg:p-16 relative shadow-xl overflow-hidden min-h-[500px] flex items-center z-10" style={{ backgroundColor: `${getSecondaryColor()}20` }}>
-                    {/* Decorative Background Fill */}
-                    <div className="absolute top-0 right-0 w-2/3 h-full mix-blend-multiply opacity-10 pointer-events-none" style={{ background: `linear-gradient(45deg, transparent, ${getPrimaryColor()})` }}></div>
-                    
-                    <div className="relative z-10 flex flex-col lg:flex-row gap-12 w-full items-stretch">
-                        {section.image ? (
-                            <div className="w-full lg:w-5/12 shrink-0 aspect-square lg:aspect-auto rounded-[2rem] overflow-hidden shadow-2xl relative group border-4 border-white">
+                <div className="w-full max-w-6xl mx-auto rounded-[3rem] p-4 relative overflow-hidden flex items-center z-10 bg-transparent">
+                    <div className="relative z-10 flex flex-col gap-0 w-full items-center">
+                        {section.image && (
+                            <div className="w-full aspect-auto h-[350px] md:h-[400px] rounded-[2rem] overflow-hidden shadow-2xl relative group border-2 border-white">
                                 <img src={section.image} alt="Commitment" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style={{ objectPosition: section.imagePosition || 'center' }} />
                                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
-                                <div className="absolute bottom-8 left-8 right-8 text-white">
+                                <div className="absolute bottom-16 left-8 right-8 text-white z-10">
                                     <div className="w-8 h-1 rounded-full mb-4 bg-white/80"></div>
                                     <p className="font-black text-2xl uppercase tracking-widest opacity-90 leading-tight">Partnership</p>
                                 </div>
                             </div>
-                        ) : (
-                            <div className="hidden lg:block w-32 shrink-0 border-r-4 border-dashed opacity-20" style={{ borderColor: getPrimaryColor() }}></div>
                         )}
                         
-                        <div className="w-full lg:flex-1 flex flex-col justify-center">
-                            <div className="bg-white p-10 md:p-14 rounded-[2rem] shadow-lg border border-gray-100 relative w-full lg:-ml-24 scale-[1.02] transform lg:translate-x-4">
-                                <div className="absolute -top-6 -left-6 md:-left-8 p-5 text-white rounded-2xl shadow-xl border-4 border-white rotate-[-3deg]" style={bgPrimaryStyle}>
+                        <div className="w-full max-w-5xl flex flex-col justify-center">
+                            <div className="bg-white px-8 md:px-12 py-10 rounded-[2rem] shadow-xl border border-gray-100 relative w-full transform -mt-16 z-20 mx-auto w-[95%]">
+                                <div className="absolute -top-8 left-6 p-4 text-white rounded-2xl shadow-lg border-4 border-white" style={bgPrimaryStyle}>
                                     <HandHeart size={36} />
                                 </div>
-                                <h3 className="text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-8 leading-tight mt-4 pt-2" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
+                                <h3 className="text-3xl lg:text-4xl font-extrabold mb-6 leading-tight mt-2 pt-2" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
                                     {section.commitmentTitle || 'Partnership Commitment'}
                                 </h3>
                                 
-                                <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed font-light">
+                                <p className="text-lg lg:text-xl text-gray-700 leading-relaxed font-light whitespace-pre-wrap">
                                     {section.commitmentText}
                                 </p>
                             </div>
