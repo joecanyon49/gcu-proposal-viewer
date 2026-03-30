@@ -815,7 +815,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <div key={i} className="rounded-2xl p-6 flex flex-col justify-between border" style={{ borderColor: getPrimaryColor() + '30', background: getPrimaryColor() + '08' }}>
                         <div className="text-sm font-semibold opacity-70 mb-2">{m.label}</div>
                         <div className="text-4xl font-black mb-2" style={primaryStyle}>{m.value}</div>
-                        {m.change !== undefined && <div className={`flex items-center gap-1 text-sm font-bold ${m.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>{m.change >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}{Math.abs(m.change)}%</div>}
+                        {m.change !== undefined && <div className={`flex items-center gap-1 text-sm font-bold ${m.changeDirection !== 'down' ? 'text-emerald-600' : 'text-red-500'}`}>{m.changeDirection !== 'down' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}{m.change}</div>}
                         {m.description && <p className="text-xs opacity-60 mt-1">{m.description}</p>}
                     </div>
                 ))}
@@ -825,14 +825,21 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const ComparisonRenderer = ({ section }: { section: ComparisonSection }) => (
         <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page" style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
-            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2></div>}
-            <div className={`grid grid-cols-${section.columns?.length || 2} gap-4 flex-1`}>
+            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2>{section.subtitle && <p className="text-lg text-gray-500 mt-1">{section.subtitle}</p>}</div>}
+            <div className="flex-1 grid gap-4" style={{ gridTemplateColumns: `repeat(${Math.min(section.columns?.length || 2, 4)}, 1fr)` }}>
                 {(section.columns || []).map((col: any, ci: number) => (
-                    <div key={ci} className={`rounded-2xl p-6 flex flex-col border-2 ${ci === 0 ? 'border-gray-200' : ''}`} style={ci > 0 ? { borderColor: getPrimaryColor() } : {}}>
-                        {col.highlighted && <div className="text-[10px] font-black uppercase tracking-widest mb-2 px-2 py-0.5 rounded self-start text-white" style={bgPrimaryStyle}>Recommended</div>}
-                        <h3 className="text-lg font-bold mb-1">{col.name}</h3>
-                        {col.price && <div className="text-3xl font-black mb-4" style={primaryStyle}>{col.price}</div>}
-                        <ul className="space-y-2 flex-1">{(col.items || []).map((item: string, i: number) => <li key={i} className="flex items-start gap-2 text-sm"><CheckCircle2 size={14} className="mt-0.5 shrink-0" style={primaryStyle} />{item}</li>)}</ul>
+                    <div key={ci} className={`rounded-2xl overflow-hidden border-2 ${col.highlighted ? 'shadow-xl' : 'border-gray-200'}`} style={{ borderColor: col.highlighted ? getPrimaryColor() : undefined }}>
+                        <div className="px-6 py-4 text-center" style={{ backgroundColor: col.highlighted ? getPrimaryColor() : '#F3F4F6' }}>
+                            <h3 className="text-lg font-extrabold" style={{ color: col.highlighted ? 'white' : getTextColor() }}>{col.heading}</h3>
+                        </div>
+                        <div className="divide-y divide-gray-100">
+                            {(col.items || []).map((item: any, i: number) => (
+                                <div key={i} className="px-6 py-3 flex items-center justify-between">
+                                    <span className="text-sm text-gray-600">{item.label}</span>
+                                    <span className="text-sm font-bold" style={{ color: col.highlighted ? getPrimaryColor() : getTextColor() }}>{item.value}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 ))}
             </div>
