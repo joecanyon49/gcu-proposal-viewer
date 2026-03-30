@@ -613,30 +613,44 @@ const Preview = ({ data }: { data: ProposalData }) => {
     );
 
     const VideoShowcase = ({ section }: { section: VideoShowcaseSection }) => (
-        <SectionContainer className="print:hidden">
-            <div className="text-center max-w-3xl mx-auto mb-10">
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h3>
-                {section.description && <p className="text-gray-600 text-lg leading-relaxed">{section.description}</p>}
-                <div className="w-16 h-1 mt-6 mx-auto rounded-full" style={bgPrimaryStyle}></div>
+        <SectionContainer className="print:hidden relative overflow-hidden">
+            {/* Visual background split to make it more dynamic */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="w-full h-1/3 bg-gray-50/50"></div>
+                <div className="w-full h-2/3 bg-gray-900 border-t border-gray-800"></div>
             </div>
-
-            <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-gray-900 relative">
-                {section.videoUrl ? (
-                    <iframe
-                        src={getEmbedUrl(section.videoUrl)}
-                        title={section.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="w-full h-full absolute inset-0"
-                    ></iframe>
-                ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-4">
-                        <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-                            <div className="w-0 h-0 border-t-8 border-t-transparent border-l-[12px] border-l-white border-b-8 border-b-transparent ml-1"></div>
+            
+            <div className="flex flex-col flex-1 w-full max-w-6xl mx-auto items-center justify-center relative z-10 px-4 xl:px-8">
+                <div className="text-center w-full max-w-4xl mb-12 bg-white/60 backdrop-blur-md p-10 rounded-[3rem] shadow-xl border border-white">
+                     <div className="inline-block p-2 px-6 rounded-full bg-white text-gray-400 font-bold uppercase tracking-widest text-xs mb-6 shadow-sm">
+                         Video Feature
+                     </div>
+                     <h3 className="text-5xl lg:text-6xl font-black mb-6 uppercase tracking-tight leading-tight" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
+                         {section.title}
+                     </h3>
+                     {section.description && <p className="text-xl lg:text-2xl font-light text-gray-600 leading-relaxed px-6">
+                         {section.description}
+                     </p>}
+                </div>
+                
+                <div className="w-full max-w-5xl aspect-video rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[8px] sm:border-[16px] border-white/10 bg-black relative transform hover:-translate-y-2 transition-transform duration-700" style={{ boxShadow: `0 30px 60px -12px ${getPrimaryColor()}40` }}>
+                    {section.videoUrl ? (
+                        <iframe
+                            src={getEmbedUrl(section.videoUrl)}
+                            title={section.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full absolute inset-0 rounded-xl"
+                        ></iframe>
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-6 bg-gray-900 rounded-xl">
+                            <div className="w-24 h-24 rounded-full bg-white/5 border border-white/10 flex items-center justify-center cursor-pointer hover:bg-white/10 hover:scale-110 transition-all duration-300 shadow-[inset_0_0_20px_rgba(255,255,255,0.05)]">
+                                <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-2"></div>
+                            </div>
+                            <p className="font-bold tracking-widest uppercase text-xs opacity-50 px-4 py-1.5 rounded-full border border-gray-800">Add Video link in editor</p>
                         </div>
-                        <p className="font-medium tracking-widest uppercase text-sm opacity-50">No Video URL Provided</p>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </SectionContainer>
     );
@@ -681,21 +695,43 @@ const Preview = ({ data }: { data: ProposalData }) => {
     );
 
     const Commitment = ({ section }: { section: CommitmentSection }) => (
-        <SectionContainer className="justify-center">
-            <SectionHeader title={section.title} />
-            <div className="max-w-3xl mx-auto w-full space-y-8 flex-1 flex flex-col justify-center">
-                {section.image && (
-                    <div className="w-full h-48 rounded-2xl overflow-hidden shadow-lg">
-                        <img src={section.image} alt="" className="w-full h-full object-cover" style={{ objectPosition: section.imagePosition || 'center' }} />
+        <SectionContainer className="justify-center overflow-hidden">
+            <SectionHeader title={section.title} subtitle="Investing in the Future" />
+            
+            <div className="flex-1 w-full flex flex-col items-center justify-center mt-4">
+                <div className="w-full max-w-6xl mx-auto rounded-[3rem] p-8 md:p-12 lg:p-16 relative shadow-xl overflow-hidden min-h-[500px] flex items-center z-10" style={{ backgroundColor: `${getSecondaryColor()}20` }}>
+                    {/* Decorative Background Fill */}
+                    <div className="absolute top-0 right-0 w-2/3 h-full mix-blend-multiply opacity-10 pointer-events-none" style={{ background: `linear-gradient(45deg, transparent, ${getPrimaryColor()})` }}></div>
+                    
+                    <div className="relative z-10 flex flex-col lg:flex-row gap-12 w-full items-stretch">
+                        {section.image ? (
+                            <div className="w-full lg:w-5/12 shrink-0 aspect-square lg:aspect-auto rounded-[2rem] overflow-hidden shadow-2xl relative group border-4 border-white">
+                                <img src={section.image} alt="Commitment" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style={{ objectPosition: section.imagePosition || 'center' }} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
+                                <div className="absolute bottom-8 left-8 right-8 text-white">
+                                    <div className="w-8 h-1 rounded-full mb-4 bg-white/80"></div>
+                                    <p className="font-black text-2xl uppercase tracking-widest opacity-90 leading-tight">Partnership</p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="hidden lg:block w-32 shrink-0 border-r-4 border-dashed opacity-20" style={{ borderColor: getPrimaryColor() }}></div>
+                        )}
+                        
+                        <div className="w-full lg:flex-1 flex flex-col justify-center">
+                            <div className="bg-white p-10 md:p-14 rounded-[2rem] shadow-lg border border-gray-100 relative w-full lg:-ml-24 scale-[1.02] transform lg:translate-x-4">
+                                <div className="absolute -top-6 -left-6 md:-left-8 p-5 text-white rounded-2xl shadow-xl border-4 border-white rotate-[-3deg]" style={bgPrimaryStyle}>
+                                    <HandHeart size={36} />
+                                </div>
+                                <h3 className="text-3xl lg:text-4xl xl:text-5xl font-extrabold mb-8 leading-tight mt-4 pt-2" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
+                                    {section.commitmentTitle || 'Partnership Commitment'}
+                                </h3>
+                                
+                                <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed font-light">
+                                    {section.commitmentText}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                )}
-                <div className="bg-gray-50 border-l-4 p-8 rounded-r-2xl" style={{ borderColor: getPrimaryColor() }}>
-                    <h3 className="text-2xl font-bold mb-4" style={{ color: getPrimaryColor() }}>
-                        {section.commitmentTitle || 'Partnership Commitment'}
-                    </h3>
-                    <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">
-                        {section.commitmentText}
-                    </p>
                 </div>
             </div>
         </SectionContainer>
@@ -942,27 +978,49 @@ const Preview = ({ data }: { data: ProposalData }) => {
     };
 
     const KpiRenderer = ({ section }: { section: KpiSection }) => (
-        <SectionContainer>
+        <SectionContainer className="relative overflow-hidden">
+            {/* Soft decorative background for Key Metrics */}
+            <div className="absolute -top-40 -right-40 w-[800px] h-[800px] rounded-full mix-blend-multiply opacity-5 blur-[100px] pointer-events-none" style={bgPrimaryStyle}></div>
+            <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full mix-blend-multiply opacity-5 blur-[80px] pointer-events-none" style={{ backgroundColor: getSecondaryColor() }}></div>
+
             <SectionHeader title={section.title} subtitle={section.subtitle} />
-            <div className="flex-1 flex flex-col justify-center relative z-10">
-                <div className={`${section.layout === 'row' ? 'flex flex-row flex-wrap justify-center' : 'grid grid-cols-2 lg:grid-cols-4'} gap-4 md:gap-6`}>
+            
+            <div className="flex-1 flex flex-col justify-center relative z-10 mt-8">
+                <div className={`${section.layout === 'row' ? 'flex flex-row flex-wrap justify-center items-stretch' : 'grid grid-cols-2 lg:grid-cols-4'} gap-6 md:gap-10`}>
                     {(section.metrics || []).map((metric, i) => (
-                        <div key={i} className={`${section.layout === 'row' ? 'flex-1 min-w-[150px]' : ''} bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col items-center justify-center overflow-hidden`} style={{ borderTop: `6px solid ${getPrimaryColor()}` }}>
-                            <div className="flex flex-col items-center justify-center gap-3 p-6 md:p-8 w-full">
-                                {metric.icon && <div className="text-4xl mb-1">{metric.icon}</div>}
+                        <div key={i} className={`${section.layout === 'row' ? 'flex-1 min-w-[250px]' : ''} bg-white rounded-[2rem] shadow-xl border-2 border-white relative group overflow-hidden transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl`}>
+                            {/* Inner Accent */}
+                            <div className="absolute top-0 left-0 w-full h-2 transition-all duration-500 group-hover:h-3" style={bgPrimaryStyle}></div>
+                            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-gray-50/50 to-transparent pointer-events-none"></div>
+                            
+                            <div className="flex flex-col items-center justify-center gap-6 p-10 md:p-12 w-full h-full relative z-10">
+                                {metric.icon && (
+                                    <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-inner bg-gray-50 text-5xl transform group-hover:scale-110 transition-transform duration-500 overflow-hidden">
+                                        <div className="opacity-90">{metric.icon}</div>
+                                    </div>
+                                )}
                                 <div 
                                     className={clsx(
-                                        "font-extrabold leading-none text-center break-words max-w-full",
-                                        (metric.value || '').toString().length > 6 ? "text-2xl lg:text-3xl" : "text-4xl lg:text-5xl"
+                                        "font-extrabold leading-none text-center break-words max-w-full drop-shadow-sm",
+                                        (metric.value || '').toString().length > 6 ? "text-4xl lg:text-5xl" : "text-6xl lg:text-7xl xl:text-8xl"
                                     )} 
                                     style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}
                                 >
                                     {metric.value}
                                 </div>
-                                <div className="text-sm font-semibold text-gray-600 text-center uppercase tracking-wide leading-snug" style={{ fontFamily: getBodyFont() }}>{metric.label}</div>
+                                
+                                <div className="w-12 h-1 rounded-full opacity-20 my-2" style={bgPrimaryStyle}></div>
+                                
+                                <div className="text-sm md:text-base font-bold text-gray-400 text-center uppercase tracking-widest leading-snug" style={{ fontFamily: getBodyFont() }}>
+                                    {metric.label}
+                                </div>
+                                
                                 {metric.change && (
-                                    <div className={`flex items-center gap-1 text-sm font-bold px-3 py-1 rounded-full whitespace-nowrap ${metric.changeDirection === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-red-600 bg-red-50'}`}>
-                                        {metric.changeDirection === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                                    <div className={clsx(
+                                        "flex items-center gap-1.5 text-sm font-bold px-4 py-1.5 rounded-full whitespace-nowrap mt-4 shadow-sm border",
+                                        metric.changeDirection === 'up' ? "text-emerald-700 bg-emerald-50 border-emerald-100" : "text-red-700 bg-red-50 border-red-100"
+                                    )}>
+                                        {metric.changeDirection === 'up' ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
                                         {metric.change}
                                     </div>
                                 )}
