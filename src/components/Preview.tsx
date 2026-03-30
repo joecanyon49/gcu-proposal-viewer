@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, BackCoverSection, VideoShowcaseSection, VideoStorySection, CommitmentSection, TextBlockSection, TableSection, TestimonialSection, DataVisualizationSection, KpiSection, ComparisonSection } from '@/types/proposal';
 import clsx from 'clsx';
@@ -948,7 +950,13 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         <div key={i} className={`${section.layout === 'row' ? 'flex-1 min-w-[150px]' : ''} bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col items-center justify-center overflow-hidden`} style={{ borderTop: `6px solid ${getPrimaryColor()}` }}>
                             <div className="flex flex-col items-center justify-center gap-3 p-6 md:p-8 w-full">
                                 {metric.icon && <div className="text-4xl mb-1">{metric.icon}</div>}
-                                <div className="text-4xl lg:text-5xl font-extrabold leading-none text-center break-words max-w-full" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
+                                <div 
+                                    className={clsx(
+                                        "font-extrabold leading-none text-center break-words max-w-full",
+                                        (metric.value || '').toString().length > 6 ? "text-2xl lg:text-3xl" : "text-4xl lg:text-5xl"
+                                    )} 
+                                    style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}
+                                >
                                     {metric.value}
                                 </div>
                                 <div className="text-sm font-semibold text-gray-600 text-center uppercase tracking-wide leading-snug" style={{ fontFamily: getBodyFont() }}>{metric.label}</div>
