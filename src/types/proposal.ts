@@ -20,6 +20,7 @@ export interface ProposalMeta {
     preparedBy: string;
     date: string;
     clientLogo?: string; // Base64 or URL
+    shareId?: string; // Public Vercel Postgres link ID
 }
 
 // --- Section Types ---
@@ -266,6 +267,7 @@ export interface DataVisualizationSection extends SectionBase {
     type: 'data_visualization';
     title: string;
     subtitle?: string;
+    description?: string;
     charts: GraphData[];
     layout: 'single' | 'grid-2' | 'grid-4';
 }
@@ -322,7 +324,13 @@ export const INITIAL_PROPOSAL_DATA: ProposalData = {
         secondaryColor: "#E0E0E0", // Light Gray
         textColor: "#000000",
         backgroundColor: "#FFFFFF",
-        fontFamily: "sans-serif"
+        fontFamily: "'Graduate', sans-serif",
+        headingFontFamily: "'Graduate', sans-serif",
+        bodyFontFamily: "'Inter', sans-serif",
+        headingFontSize: 'lg',
+        bodyFontSize: 'md',
+        borderStyle: 'none',
+        sectionDivider: 'none'
     },
     sections: [
         {

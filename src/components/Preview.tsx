@@ -1,11 +1,8 @@
-'use client';
-
 import React from 'react';
-import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, CommitmentSection, TextBlockSection, BackCoverSection, VideoShowcaseSection, VideoStorySection, TableSection, TestimonialSection, DataVisualizationSection, KpiSection, ComparisonSection } from '@/types/proposal';
+import { ProposalData, ProposalSection, CoverSection, SynopsisSection, StorySection, ProblemSection, ContentSection, ImpactSection, InvestmentSection, BackCoverSection, VideoShowcaseSection, VideoStorySection, CommitmentSection, TextBlockSection, TableSection, TestimonialSection, DataVisualizationSection, KpiSection, ComparisonSection } from '@/types/proposal';
 import clsx from 'clsx';
-import { Quote, CheckCircle2, Star, Target, Zap, Layout, TrendingUp, DollarSign, Calculator, User, ArrowUpRight, ArrowDownRight } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, Area, AreaChart, LineChart, Line, RadarChart, Radar, PolarGrid, PolarAngleAxis } from 'recharts';
-
+import { Orbit, Quote, CheckCircle2, ArrowRight, Star, Target, Zap, Layout, TrendingUp, DollarSign, Calculator, Calendar, Users, User, PlayCircle, Heart, Shield, Award, BookOpen, Globe, Lightbulb, HandHeart, GraduationCap, Building, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend, Area, AreaChart, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 
 const Preview = ({ data }: { data: ProposalData }) => {
 
@@ -16,6 +13,12 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const getBgColor = () => data.theme.backgroundColor || '#FFFFFF';
     const getHeadingFont = () => data.theme.headingFontFamily || data.theme.fontFamily || "'Graduate', sans-serif";
     const getBodyFont = () => data.theme.bodyFontFamily || data.theme.fontFamily || "'Inter', sans-serif";
+    const getHeadingSizeClass = () => ({ sm: 'text-4xl', md: 'text-5xl', lg: 'text-6xl', xl: 'text-7xl' }[data.theme.headingFontSize || 'lg']);
+    const getBodySizeClass = () => ({ sm: 'text-sm', md: 'text-base', lg: 'text-lg' }[data.theme.bodyFontSize || 'md']);
+
+    // Derived values based on themes, ensuring text is readable
+    // E.g., if background is dark, we might want light text, but here we assume white bg sections mostly.
+    const isDarkPrimary = data.theme.primaryColor !== '#ffffff' && data.theme.primaryColor !== '#f8f9fa';
 
     // Helper to get embeddable YouTube URLs
     const getEmbedUrl = (url: string) => {
@@ -31,10 +34,10 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const secondaryStyle = { color: getSecondaryColor() };
     const bgSecondaryStyle = { backgroundColor: getSecondaryColor() };
 
-    // Common Section Container - responsive padding for mobile
+    // Common Section Container
     const SectionContainer = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
         <div className={clsx(
-            "relative w-full min-h-screen md:min-h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page print:break-before-page overflow-hidden",
+            "relative w-full min-h-[1056px] flex flex-col p-16 break-before-page print:break-before-page",
             className
         )} style={{ fontFamily: getBodyFont(), backgroundColor: getBgColor(), color: getTextColor() }}>
             {children}
@@ -48,11 +51,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 <div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div>
                 <span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span>
             </div>
-            <h2 className="text-5xl font-extrabold uppercase tracking-tight text-gray-900 leading-none mb-4" style={{ color: getPrimaryColor() }}>
+            <h2 className={`${getHeadingSizeClass()} font-extrabold uppercase tracking-tight text-gray-900 leading-none mb-4`} style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
                 {title}
             </h2>
             {subtitle && (
-                <p className="text-xl font-light text-gray-500 max-w-2xl">{subtitle}</p>
+                <p className={`${getBodySizeClass()} font-light text-gray-500 max-w-2xl`}>{subtitle}</p>
             )}
         </div>
     );
@@ -61,31 +64,31 @@ const Preview = ({ data }: { data: ProposalData }) => {
     // --- SECTIONS ---
 
     const Cover = ({ section, meta }: { section: CoverSection, meta: any }) => (
-        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-end p-6 sm:p-10 md:p-20 break-before-page text-white overflow-hidden" style={{ fontFamily: getHeadingFont() }}>
+        <div className="relative w-full h-[1056px] flex flex-col justify-end p-20 break-before-page text-white overflow-hidden" style={{ fontFamily: getHeadingFont() }}>
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image && (
                     <img src={section.image} alt="Cover" className="w-full h-full object-cover" />
                 )}
-                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-black/10"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10"></div>
                 {/* Accent Overlay */}
                 <div className="absolute inset-0 mix-blend-multiply transition-opacity duration-300" style={{ ...bgPrimaryStyle, opacity: data.theme.overlayOpacity ?? 0.6 }}></div>
             </div>
 
             {/* Top Left Logo */}
-            <div className="absolute top-0 left-0 p-4 sm:p-8 md:p-16 z-20">
-                <img src="/assets/RunningLope_WHITE.png" alt="GCU" className="h-12 sm:h-16 md:h-20 w-auto object-contain" />
+            <div className="absolute top-0 left-0 p-16 z-20">
+                <img src="/assets/RunningLope_WHITE.png" alt="GCU" className="h-20 w-auto object-contain" />
             </div>
 
             {/* Content */}
-            <div className="relative z-10 mb-6 sm:mb-12 animate-slide-up">
-                <div className="w-16 sm:w-24 h-1.5 sm:h-2 mb-4 sm:mb-8 bg-white/80"></div>
-                <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold uppercase tracking-tighter mb-2 sm:mb-4 leading-tight">
+            <div className="relative z-10 mb-12 animate-slide-up">
+                <div className="w-24 h-2 mb-8 bg-white/80"></div>
+                <h1 className="text-7xl font-extrabold uppercase tracking-tighter mb-4 leading-tight">
                     {section.title}
                 </h1>
-                <p className="text-lg sm:text-2xl md:text-3xl font-light opacity-90 mb-8 sm:mb-16 max-w-3xl">{section.subtitle}</p>
+                <p className="text-3xl font-light opacity-90 mb-16 max-w-3xl">{section.subtitle}</p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-12 border-t border-white/20 pt-6 sm:pt-10">
+                <div className="grid grid-cols-2 gap-12 border-t border-white/20 pt-10">
                     <div>
                         <p className="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">Prepared For</p>
                         <p className="text-2xl font-bold">{meta.preparedFor}</p>
@@ -99,7 +102,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
             </div>
 
             {/* Decorative Elements */}
-            <div className="absolute top-0 right-0 p-4 sm:p-8 md:p-16 z-20">
+            <div className="absolute top-0 right-0 p-16 z-20">
                 {meta.clientLogo ? (
                     <img src={meta.clientLogo} alt="Client Logo" className="h-20 object-contain drop-shadow-lg bg-white/10 backdrop-blur-md p-2 rounded-lg" />
                 ) : (
@@ -108,13 +111,13 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     </div>
                 )}
             </div>
-            <div className="absolute bottom-0 right-0 w-64 h-64 border-t-32 border-l-32 border-white/10 rounded-tl-[100px] pointer-events-none"></div>
+            <div className="absolute bottom-0 right-0 w-64 h-64 border-t-[32px] border-l-[32px] border-white/10 rounded-tl-[100px] pointer-events-none"></div>
         </div>
     );
 
     const Synopsis = ({ section }: { section: SynopsisSection }) => (
         <SectionContainer>
-            <SectionHeader title={section.title} subtitle="Executive Summary" />
+            <SectionHeader title={section.title} subtitle={section.subtitle || "Executive Summary"} />
 
             <div className="flex flex-col-reverse lg:flex-row gap-16 flex-1">
                 <div className="flex-1 flex flex-col justify-center">
@@ -122,18 +125,31 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         {section.content}
                     </div>
 
-                    <div className="space-y-4 sm:space-y-6 overflow-hidden">
+                    <div className="space-y-6">
                         {(section.summaryPillars || []).map((pillar, i) => (
-                            <div key={i} className="flex items-start gap-3 sm:gap-6 p-4 sm:p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow duration-300 group">
-                                <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center text-lg sm:text-2xl font-bold text-white shadow-md transform group-hover:scale-110 transition-transform duration-300 shrink-0" style={bgPrimaryStyle}>
+                            <div key={i} className="flex items-start gap-6 p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow duration-300 group">
+                                <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold text-white shadow-md transform group-hover:scale-110 transition-transform duration-300 flex-shrink-0" style={bgPrimaryStyle}>
                                     {pillar.icon === '1' && <Target size={28} />}
                                     {pillar.icon === '2' && <Zap size={28} />}
                                     {pillar.icon === '3' && <Star size={28} />}
-                                    {!['1', '2', '3'].includes(pillar.icon) && pillar.icon}
+                                    {pillar.icon === 'heart' && <Heart size={28} />}
+                                    {pillar.icon === 'shield' && <Shield size={28} />}
+                                    {pillar.icon === 'award' && <Award size={28} />}
+                                    {pillar.icon === 'book' && <BookOpen size={28} />}
+                                    {pillar.icon === 'globe' && <Globe size={28} />}
+                                    {pillar.icon === 'lightbulb' && <Lightbulb size={28} />}
+                                    {pillar.icon === 'trending' && <TrendingUp size={28} />}
+                                    {pillar.icon === 'handheart' && <HandHeart size={28} />}
+                                    {pillar.icon === 'graduation' && <GraduationCap size={28} />}
+                                    {pillar.icon === 'building' && <Building size={28} />}
+                                    {pillar.icon === 'users' && <Users size={28} />}
+                                    {pillar.icon === 'dollar' && <DollarSign size={28} />}
+                                    {pillar.icon === 'calendar' && <Calendar size={28} />}
+                                    {!['1','2','3','heart','shield','award','book','globe','lightbulb','trending','handheart','graduation','building','users','dollar','calendar'].includes(pillar.icon) && <Target size={28} />}
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                    <h4 className="text-base sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2">{pillar.title}</h4>
-                                    <p className="text-sm sm:text-base text-gray-500 leading-snug wrap-break-word">{pillar.description}</p>
+                                <div>
+                                    <h4 className="text-xl font-bold text-gray-900 mb-2">{pillar.title}</h4>
+                                    <p className="text-gray-500 leading-snug">{pillar.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -144,12 +160,12 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <div className="absolute inset-0 rounded-[4rem] transform rotate-3 opacity-20" style={bgPrimaryStyle}></div>
                     <div className="relative h-full w-full rounded-[4rem] overflow-hidden shadow-2xl border-8 border-white">
                         {section.image ? (
-                            <img src={section.image} alt="Synopsis" className="w-full h-full object-cover" />
+                            <img src={section.image} alt="Synopsis" className="w-full h-full object-cover" style={{ objectPosition: section.imagePosition || 'center' }} />
                         ) : (
                             <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">NO IMAGE</div>
                         )}
                         {/* Overlay Text */}
-                        <div className="absolute bottom-0 left-0 right-0 p-8 bg-linear-to-t from-black/80 to-transparent text-white">
+                        <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent text-white">
                             <p className="font-bold text-lg uppercase tracking-wider">Our Commitment</p>
                             <p className="text-sm opacity-80">Building foundations for the future.</p>
                         </div>
@@ -160,7 +176,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
     );
 
     const Story = ({ section }: { section: StorySection }) => (
-        <SectionContainer className="justify-center items-center text-center p-32!">
+        <SectionContainer className="justify-center items-center text-center !p-32">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: `radial-gradient(${getPrimaryColor()} 2px, transparent 2px)`, backgroundSize: '30px 30px' }}></div>
 
@@ -175,15 +191,15 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
                 <div className="relative mb-16">
                     <Quote className="absolute -top-10 -left-12 opacity-10 transform -scale-x-100" size={120} style={{ color: getPrimaryColor() }} />
-                    <p className="text-2xl md:text-3xl font-serif italic text-gray-600 leading-relaxed relative z-10">
+                    <p className="text-2xl md:text-3xl italic text-gray-600 leading-relaxed relative z-10" style={{ fontFamily: getBodyFont() }}>
                         "{section.content}"
                     </p>
                 </div>
 
                 {section.image && (
                     <div className="w-full h-96 rounded-3xl overflow-hidden shadow-2xl mt-12 relative group">
-                        <img src={section.image} alt="Story" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-8 py-4 rounded-xl shadow-lg text-center">
+                        <img src={section.image} alt="Story" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" style={{ objectPosition: section.imagePosition || 'center' }} />
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-8 py-4 rounded-xl shadow-lg text-center">
                             <p className="font-bold text-gray-900">{section.quote || "Our Shared Vision"}</p>
                         </div>
                     </div>
@@ -194,7 +210,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const Problem = ({ section }: { section: ProblemSection }) => (
         <SectionContainer>
-            <SectionHeader title={section.title} subtitle="Understanding the Landscape" />
+            <SectionHeader title={section.title} subtitle={section.subtitle || "Understanding the Landscape"} />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16 flex-1 items-center">
                 <div>
@@ -205,7 +221,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     <div className="space-y-6">
                         {section.points.map((point, i) => (
                             <div key={i} className="flex gap-6 items-start">
-                                <div className="mt-1 w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white font-bold" style={bgSecondaryStyle}>
+                                <div className="mt-1 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold" style={bgSecondaryStyle}>
                                     {i + 1}
                                 </div>
                                 <div>
@@ -220,8 +236,8 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 <div className="relative h-full min-h-[500px] w-full bg-gray-100 rounded-[3rem] overflow-hidden shadow-inner">
                     {section.image ? (
                         <div className="absolute inset-0">
-                            <img src={section.image} alt="Problem" className="w-full h-full object-cover opacity-80 mix-blend-multiply" />
-                            <div className="absolute inset-0 bg-linear-to-br from-transparent to-black/40"></div>
+                            <img src={section.image} alt="Problem" className="w-full h-full object-cover opacity-80 mix-blend-multiply" style={{ objectPosition: section.imagePosition || 'center' }} />
+                            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-black/40"></div>
                         </div>
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center opacity-10">
@@ -235,25 +251,25 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const Content = ({ section }: { section: ContentSection }) => (
         <SectionContainer>
-            <SectionHeader title={section.title} subtitle="Strategic Roadmap" />
+            <SectionHeader title={section.title} subtitle={section.subtitle || "Strategic Roadmap"} />
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12 flex-1 overflow-hidden">
+            <div className="grid grid-cols-12 gap-12 flex-1">
                 {/* Left Column: List */}
-                <div className="col-span-1 lg:col-span-8 flex flex-col gap-4 sm:gap-8 overflow-hidden">
+                <div className="col-span-12 lg:col-span-8 flex flex-col gap-8">
                     {section.elements.map((el, i) => (
-                        <div key={i} className="bg-white p-4 sm:p-8 rounded-2xl shadow-xs border border-gray-100 hover:border-gray-300 transition-all duration-300 relative overflow-hidden group">
+                        <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-gray-300 transition-all duration-300 relative overflow-hidden group">
                             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                                 <h4 className="text-9xl font-black text-gray-900">{i + 1}</h4>
                             </div>
 
                             <div className="relative z-10 flex gap-6">
-                                <div className="w-2 h-24 rounded-full shrink-0" style={bgPrimaryStyle}></div>
+                                <div className="w-2 h-24 rounded-full flex-shrink-0" style={bgPrimaryStyle}></div>
                                 <div className="flex-1">
                                     <h3 className="text-2xl font-bold text-gray-900 mb-2">{el.title}</h3>
                                     <p className="text-gray-600 mb-6 font-medium">{el.description}</p>
-                                    <div className="flex flex-wrap gap-2 sm:gap-3">
+                                    <div className="flex flex-wrap gap-3">
                                         {el.items.map((item, j) => (
-                                            <span key={j} className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-gray-50 text-xs sm:text-sm font-semibold text-gray-700 border border-gray-200">
+                                            <span key={j} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 text-sm font-semibold text-gray-700 border border-gray-200">
                                                 <CheckCircle2 size={14} style={{ color: getPrimaryColor() }} />
                                                 {item}
                                             </span>
@@ -269,7 +285,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 <div className="col-span-0 lg:col-span-4 hidden lg:flex flex-col gap-6">
                     <div className="flex-1 bg-gray-900 rounded-3xl overflow-hidden relative text-white p-10 flex flex-col justify-end shadow-2xl">
                         {section.image && (
-                            <img src={section.image} className="absolute inset-0 w-full h-full object-cover opacity-60" alt="Sidebar" />
+                            <img src={section.image} className="absolute inset-0 w-full h-full object-cover opacity-60" alt="Sidebar" style={{ objectPosition: section.imagePosition || 'center' }} />
                         )}
                         <div className="relative z-10">
                             <h4 className="text-3xl font-bold mb-4">Scope Summary</h4>
@@ -284,7 +300,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
         </SectionContainer>
     );
 
-    const GivingImpactCalculator = ({ primaryColor, config }: { primaryColor: string, config?: { costPerScholarship: number, costPerServiceHour: number, minDonation?: number, maxDonation?: number, step?: number } }) => {
+    const GivingImpactCalculator = ({ primaryColor, config, pledgeYears = 1 }: { primaryColor: string, config?: any, pledgeYears?: number }) => {
 
         // Defaults if not provided
         const costPerScholarship = config?.costPerScholarship || 2500;
@@ -292,6 +308,10 @@ const Preview = ({ data }: { data: ProposalData }) => {
         const minDonation = config?.minDonation || 1000;
         const maxDonation = config?.maxDonation || 50000;
         const step = config?.step || 1000;
+        const scholarshipLabel = config?.scholarshipLabel || "Cost per Scholarship";
+        const serviceHourLabel = config?.serviceHourLabel || "Cost per Service Hour";
+        const scholarshipFundedLabel = config?.scholarshipFundedLabel || "Scholarships Funded";
+        const serviceHourFundedLabel = config?.serviceHourFundedLabel || "Hours of Impact";
 
         const [amount, setAmount] = React.useState(minDonation);
 
@@ -309,29 +329,28 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 data-min={minDonation}
                 data-max={maxDonation}
                 data-primary-color={primaryColor}
-                className="flex flex-col items-center justify-center w-full h-full p-4 sm:p-8"
+                className="relative w-full flex flex-col items-center justify-center p-8"
             >
-                {/* Print view */}
-                <div className="hidden print:flex w-full h-full flex-col items-center justify-center text-center">
+                <div className="hidden print:flex w-full h-full flex-col items-center justify-center p-4 sm:p-8 text-center">
                     <div className="grid grid-cols-2 gap-3 sm:gap-8 w-full max-w-lg mx-auto">
-                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-xs flex flex-col items-center justify-center">
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center">
                             <div className="text-2xl sm:text-4xl font-black text-gray-900 mb-1 sm:mb-2">${costPerScholarship.toLocaleString()}</div>
-                            <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">Cost per Scholarship</div>
+                            <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">{scholarshipLabel}</div>
                         </div>
-                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-xs flex flex-col items-center justify-center">
+                        <div className="bg-white p-3 sm:p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center">
                             <div className="text-2xl sm:text-4xl font-black text-gray-900 mb-1 sm:mb-2">${costPerServiceHour.toLocaleString()}</div>
-                            <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">Cost per Service Hour</div>
+                            <div className="text-[10px] sm:text-xs font-bold uppercase text-gray-400">{serviceHourLabel}</div>
                         </div>
                     </div>
                 </div>
 
-                <div className="w-full max-w-lg space-y-4 sm:space-y-8 animate-fade-in print:hidden">
-                    <div className="space-y-3 sm:space-y-6">
-                        <div className="flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end sm:gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
+                <div className="w-full max-w-lg space-y-6 animate-fade-in print:hidden">
+                    <div className="space-y-6">
+                        <div className="flex justify-between items-end text-sm font-bold text-gray-400 uppercase tracking-widest">
                             <span>Contribution</span>
-                            <span id="impact-amount-display" className="text-xl sm:text-3xl font-black" style={{ color: primaryColor }}>${amount.toLocaleString()}</span>
+                            <span id="impact-amount-display" className="text-3xl font-black" style={{ color: primaryColor }}>${amount.toLocaleString()}</span>
                         </div>
-                        <div className="relative h-6 sm:h-4 bg-gray-100 rounded-full print:hidden touch-none">
+                        <div className="relative h-4 bg-gray-100 rounded-full print:hidden">
                             <div
                                 id="impact-slider-fill"
                                 className="absolute top-0 left-0 h-full rounded-full transition-all duration-75"
@@ -345,13 +364,12 @@ const Preview = ({ data }: { data: ProposalData }) => {
                                 step={step}
                                 value={amount}
                                 onChange={(e) => setAmount(Number(e.target.value))}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer touch-none"
-                                style={{ touchAction: 'none' }}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
                             <div
                                 id="impact-slider-thumb"
-                                className="absolute top-1/2 w-8 h-8 sm:w-6 sm:h-6 bg-white border-2 rounded-full shadow-md pointer-events-none"
-                                style={{ left: `${percentage}%`, borderColor: primaryColor, transform: `translate(-50%, -50%)` }}
+                                className="absolute top-1/2 w-6 h-6 bg-white border-2 rounded-full shadow-md pointer-events-none transition-all duration-75"
+                                style={{ left: `${percentage}%`, borderColor: primaryColor, transform: `translate(-50%, calc(-50% + 0.5px))` }}
                             />
                         </div>
                         <div className="flex justify-between text-xs font-medium text-gray-400 print:hidden">
@@ -360,27 +378,36 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 sm:gap-8">
-                        <div className="bg-white p-3 sm:p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
-                            <div className="mb-1 sm:mb-2 p-2 sm:p-3 rounded-full bg-purple-50 text-purple-600">
-                                <Target size={18} className="sm:hidden" style={{ color: primaryColor }} />
-                                <Target size={24} className="hidden sm:block" style={{ color: primaryColor }} />
+                    <div className="grid grid-cols-2 gap-8">
+                        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="mb-2 p-3 rounded-full bg-purple-50 text-purple-600">
+                                <Target size={24} style={{ color: primaryColor }} />
                             </div>
-                            <div id="impact-scholarships-display" className="text-2xl sm:text-4xl font-black text-gray-900 mb-0.5 sm:mb-1 transition-all">{scholarships}</div>
-                            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">Scholarships</div>
+                            <div id="impact-scholarships-display" className="text-4xl font-black text-gray-900 mb-1 transition-all key={amount}">{scholarships}</div>
+                            <div className="text-xs font-bold uppercase tracking-widest text-gray-400">{scholarshipFundedLabel}</div>
                         </div>
-                        <div className="bg-white p-3 sm:p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
-                            <div className="mb-1 sm:mb-2 p-2 sm:p-3 rounded-full bg-blue-50 text-blue-600">
-                                <Zap size={18} className="sm:hidden" style={{ color: primaryColor }} />
-                                <Zap size={24} className="hidden sm:block" style={{ color: primaryColor }} />
+                        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col items-center justify-center text-center">
+                            <div className="mb-2 p-3 rounded-full bg-blue-50 text-blue-600">
+                                <Zap size={24} style={{ color: primaryColor }} />
                             </div>
-                            <div id="impact-hours-display" className="text-2xl sm:text-4xl font-black text-gray-900 mb-0.5 sm:mb-1 transition-all">{serviceHours.toLocaleString()}+</div>
-                            <div className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">Hours of Impact</div>
+                            <div id="impact-hours-display" className="text-4xl font-black text-gray-900 mb-1 transition-all key={amount}">{serviceHours.toLocaleString()}+</div>
+                            <div className="text-xs font-bold uppercase tracking-widest text-gray-400">{serviceHourFundedLabel}</div>
                         </div>
                     </div>
 
-                    <p className="text-center text-[10px] sm:text-xs font-medium text-gray-400 px-2 print:hidden">
-                        Drag the slider to explore your impact.
+                    {pledgeYears > 1 && (
+                        <div className="mt-6 p-5 rounded-2xl border-2 text-center print:block" style={{ borderColor: primaryColor, backgroundColor: `${primaryColor}10` }}>
+                            <p className="text-xs font-bold uppercase tracking-widest mb-2 opacity-60">Total Pledge Over {pledgeYears} Years</p>
+                            <div className="text-4xl font-black mb-1" style={{ color: primaryColor }}>${(amount * pledgeYears).toLocaleString()}</div>
+                            <div className="flex justify-center gap-8 mt-3 text-sm">
+                                <span><span className="font-black">{Math.floor(amount * pledgeYears / costPerScholarship)}</span> <span className="opacity-60">{scholarshipFundedLabel}</span></span>
+                                <span><span className="font-black">{Math.floor(amount * pledgeYears / costPerServiceHour).toLocaleString()}</span> <span className="opacity-60">{serviceHourFundedLabel}</span></span>
+                            </div>
+                        </div>
+                    )}
+
+                    <p className="text-center text-xs font-medium text-gray-400 max-w-xs mx-auto print:hidden">
+                        Drag the slider to see how your contribution directly impacts our students and community.
                     </p>
                 </div>
             </div>
@@ -389,7 +416,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const Impact = ({ section }: { section: ImpactSection }) => (
         <SectionContainer>
-            <SectionHeader title={section.title} subtitle="Measurable Outcomes" />
+            <SectionHeader title={section.title} subtitle={section.subtitle || "Measurable Outcomes"} />
 
             <div className="flex flex-col gap-12 flex-1 min-h-0">
                 {/* Stats Row */}
@@ -420,11 +447,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 </div>
 
                 {/* Graph / Data Analysis Area */}
-                <div className="flex-1 bg-gray-50 rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-gray-200 shadow-inner relative flex flex-col min-h-[320px] sm:min-h-[350px] overflow-hidden">
-                    <div className="flex items-center justify-between mb-4 sm:mb-6 shrink-0">
-                        <h3 className="text-base sm:text-xl font-bold text-gray-700 flex items-center gap-2">
-                            {section.graph && section.graph.data.length > 0 ? <TrendingUp size={18} className="shrink-0" /> : <Calculator size={18} className="shrink-0" />}
-                            <span className="truncate">{section.graph && section.graph.data.length > 0 ? "Data Analysis" : "Impact Calculator"}</span>
+                <div className="flex-1 bg-gray-50 rounded-3xl p-8 border border-gray-200 shadow-inner relative flex flex-col min-h-[350px]">
+                    <div className="flex items-center justify-between mb-6 shrink-0">
+                        <h3 className="text-xl font-bold text-gray-700 flex items-center gap-2">
+                            {section.graph && section.graph.data.length > 0 ? <TrendingUp size={20} /> : <Calculator size={20} />}
+                            {section.graph && section.graph.data.length > 0 ? "Data Analysis" : "Impact Calculator"}
                         </h3>
                         {section.graph && section.graph.data.length > 0 && (
                             <div className="flex gap-2">
@@ -435,7 +462,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         )}
                     </div>
 
-                    <div className="flex-1 w-full relative">
+                    <div className="flex-1 w-full relative flex flex-col items-center justify-center">
                         {section.graph && section.graph.data.length > 0 ? (
                             <ResponsiveContainer width="100%" height="100%">
                                 {section.graph.type === 'bar' ? (
@@ -473,7 +500,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                                 )}
                             </ResponsiveContainer>
                         ) : (
-                            <GivingImpactCalculator primaryColor={getPrimaryColor()} config={section.calculator} />
+                            <GivingImpactCalculator primaryColor={getPrimaryColor()} config={section.calculator} pledgeYears={section.pledgeYears || 1} />
                         )}
                     </div>
                 </div>
@@ -483,24 +510,24 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const Investment = ({ section }: { section: InvestmentSection }) => (
         <SectionContainer className="justify-center items-center">
-            <div className="absolute inset-x-0 top-0 h-2 bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
+            <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-16">
                     <h2 className="text-6xl font-black uppercase tracking-tight mb-4" style={{ color: getPrimaryColor() }}>{section.title}</h2>
-                    <p className="text-xl text-gray-500">Partnership Commitment</p>
+                    <p className="text-xl text-gray-500">{section.subtitle || "Partnership Commitment"}</p>
                 </div>
 
-                <div className="bg-white rounded-2xl sm:rounded-4xl shadow-2xl border border-gray-100 overflow-hidden relative">
+                <div className="bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden relative">
                     <div className="h-4 w-full" style={bgPrimaryStyle}></div>
-                    <div className="p-4 sm:p-8 md:p-16 flex flex-col gap-6 sm:gap-10">
+                    <div className="p-16 flex flex-col gap-10">
                         {section.elements.map((el, i) => (
                             <React.Fragment key={i}>
                                 {el.isTotal ? (
-                                    <div className="mt-4 sm:mt-8 pt-6 sm:pt-10 border-t-2 border-dashed border-gray-200">
-                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
-                                            <span className="text-lg sm:text-2xl font-bold text-gray-400 uppercase tracking-widest">{el.item}</span>
-                                            <span className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter" style={{ color: getPrimaryColor() }}>{el.cost}</span>
+                                    <div className="mt-8 pt-10 border-t-2 border-dashed border-gray-200">
+                                        <div className="flex justify-between items-end">
+                                            <span className="text-2xl font-bold text-gray-400 uppercase tracking-widest">{el.item}</span>
+                                            <span className="text-7xl font-black tracking-tighter" style={{ color: getPrimaryColor() }}>{el.cost}</span>
                                         </div>
                                     </div>
                                 ) : (
@@ -517,7 +544,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                             </React.Fragment>
                         ))}
                     </div>
-                    <div className="bg-gray-50 px-4 sm:px-8 md:px-16 py-4 sm:py-8 text-center border-t border-gray-100">
+                    <div className="bg-gray-50 px-16 py-8 text-center border-t border-gray-100">
                         <p className="text-gray-500 text-sm font-medium">
                             This proposal is valid for 30 days from presentation.
                         </p>
@@ -529,7 +556,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const Team = ({ section }: { section: any }) => (
         <SectionContainer>
-            <SectionHeader title={section.title} subtitle="Meet the Experts" />
+            <SectionHeader title={section.title} subtitle={section.subtitle || "Meet the Experts"} />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4">
                 {(section.members || []).map((member: any, i: number) => (
                     <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 group hover:-translate-y-2 transition-transform duration-300">
@@ -542,11 +569,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                                     src={(!member.image || member.image === "/assets/proposal/avatar-placeholder.jpg")
                                         ? "/team-placeholder.png"
                                         : member.image}
-                                    className={`w-full h-full object-cover ${(!member.image || member.image.includes('placeholder')) ? 'scale-110' : 'scale-110'}`}
-                                    onError={(e) => {
-                                        // Keep base64 ONLY as a catastrophic fallback
-                                        e.currentTarget.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==";
-                                    }}
+                                    className="w-full h-full object-cover scale-110"
                                 />
                             </div>
                         </div>
@@ -563,16 +586,16 @@ const Preview = ({ data }: { data: ProposalData }) => {
 
     const Timeline = ({ section }: { section: any }) => (
         <SectionContainer>
-            <SectionHeader title={section.title} subtitle="Implementation Roadmap" />
+            <SectionHeader title={section.title} subtitle={section.subtitle || "Implementation Roadmap"} />
             <div className="relative py-10 flex-1">
                 <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 transform -translate-x-1/2"></div>
                 <div className="space-y-16 relative">
                     {(section.steps || []).map((step: any, i: number) => (
                         <div key={i} className={`flex flex-col md:flex-row gap-8 md:gap-16 items-center ${i % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
                             <div className="hidden md:block w-1/2"></div>
-                            <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full border-4 border-white shadow-sm transform -translate-x-1/2" style={bgPrimaryStyle}></div>
+                            <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full border-4 border-white shadow transform -translate-x-1/2" style={bgPrimaryStyle}></div>
                             <div className={`w-full md:w-1/2 pl-20 md:pl-0 ${i % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16'}`}>
-                                <div className="bg-white p-6 rounded-2xl shadow-xs border border-gray-100 relative group hover:shadow-lg transition-shadow">
+                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative group hover:shadow-lg transition-shadow">
                                     <span className="inline-block px-3 py-1 rounded-full text-xs font-bold text-white mb-3" style={bgPrimaryStyle}>
                                         {step.date}
                                     </span>
@@ -587,7 +610,6 @@ const Preview = ({ data }: { data: ProposalData }) => {
         </SectionContainer>
     );
 
-    // --- VIDEO SECTIONS ---
     const VideoShowcase = ({ section }: { section: VideoShowcaseSection }) => (
         <SectionContainer className="print:hidden">
             <div className="text-center max-w-3xl mx-auto mb-10">
@@ -608,7 +630,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-4">
                         <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-                            <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent ml-1"></div>
+                            <div className="w-0 h-0 border-t-8 border-t-transparent border-l-[12px] border-l-white border-b-8 border-b-transparent ml-1"></div>
                         </div>
                         <p className="font-medium tracking-widest uppercase text-sm opacity-50">No Video URL Provided</p>
                     </div>
@@ -628,13 +650,13 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     )}
                     <h3 className="text-4xl font-bold text-gray-900 leading-tight">{section.title}</h3>
                     <div className="prose prose-lg text-gray-600 leading-relaxed max-w-none prose-p:mb-4">
-                        {section.content.split('\n').map((paragraph: string, i: number) => (
+                        {section.content.split('\n').map((paragraph, i) => (
                             <p key={i}>{paragraph}</p>
                         ))}
                     </div>
                 </div>
 
-                <div className="w-full md:w-5/12 aspect-4/5 md:aspect-3/4 rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-900 relative shrink-0">
+                <div className="w-full md:w-5/12 aspect-[4/5] md:aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-900 relative shrink-0">
                     {section.videoUrl ? (
                         <iframe
                             src={getEmbedUrl(section.videoUrl)}
@@ -646,7 +668,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center text-gray-500 flex-col gap-4 bg-gray-800">
                             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                                <div className="w-0 h-0 border-t-6 border-t-transparent border-l-10 border-l-white border-b-6 border-b-transparent ml-1"></div>
+                                <div className="w-0 h-0 border-t-6 border-t-transparent border-l-[10px] border-l-white border-b-6 border-b-transparent ml-1"></div>
                             </div>
                             <p className="font-medium tracking-widest uppercase text-[10px] opacity-50">Add Video URL</p>
                         </div>
@@ -662,7 +684,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
             <div className="max-w-3xl mx-auto w-full space-y-8 flex-1 flex flex-col justify-center">
                 {section.image && (
                     <div className="w-full h-48 rounded-2xl overflow-hidden shadow-lg">
-                        <img src={section.image} alt="" className="w-full h-full object-cover" />
+                        <img src={section.image} alt="" className="w-full h-full object-cover" style={{ objectPosition: section.imagePosition || 'center' }} />
                     </div>
                 )}
                 <div className="bg-gray-50 border-l-4 p-8 rounded-r-2xl" style={{ borderColor: getPrimaryColor() }}>
@@ -680,16 +702,17 @@ const Preview = ({ data }: { data: ProposalData }) => {
     const TextBlock = ({ section }: { section: TextBlockSection }) => (
         <SectionContainer>
             {section.title && <SectionHeader title={section.title} />}
-            <div className="flex-1 flex items-center justify-center">
-                <div className="w-full max-w-3xl">
-                    <p className="text-xl text-gray-700 leading-relaxed whitespace-pre-wrap">{section.content}</p>
+            <div className="flex-1 flex flex-col justify-center relative z-10">
+                <div className="w-full max-w-4xl">
+                    <div className="w-16 h-1.5 rounded-full mb-8" style={{ backgroundColor: getPrimaryColor() }}></div>
+                    <p className="text-2xl text-gray-700 leading-relaxed whitespace-pre-wrap" style={{ fontFamily: getBodyFont() }}>{section.content}</p>
                 </div>
             </div>
         </SectionContainer>
     );
 
     const BackCover = ({ section, meta }: { section: BackCoverSection, meta: any }) => (
-        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col justify-center p-6 sm:p-10 md:p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getHeadingFont() }}>
+        <div className="relative w-full h-[1056px] flex flex-col justify-center p-20 break-before-page overflow-hidden bg-gray-900 text-white" style={{ fontFamily: getHeadingFont() }}>
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 {section.image ? (
@@ -702,22 +725,22 @@ const Preview = ({ data }: { data: ProposalData }) => {
                 )}
                 {/* Geometric Accent */}
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-                    <div className="absolute -top-1/2 -right-1/2 w-full h-full border-2 border-white/20 rounded-full"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] border border-white/10 rounded-full"></div>
+                    <div className="absolute -top-1/2 -right-1/2 w-[100%] h-[100%] border-[2px] border-white/20 rounded-full"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] border-[1px] border-white/10 rounded-full"></div>
                 </div>
             </div>
 
-            <div className="relative z-10 text-center max-w-4xl mx-auto space-y-6 sm:space-y-12 px-4">
+            <div className="relative z-10 text-center max-w-4xl mx-auto space-y-12">
                 {/* Logo or Brand Mark */}
-                <div className="flex justify-center mb-6 sm:mb-12">
+                <div className="flex justify-center mb-12">
                     <img
                         src="/assets/RunningLope_WHITE.png"
                         alt="GCU Lope"
-                        className="h-20 sm:h-24 md:h-32 object-contain opacity-90 drop-shadow-2xl"
+                        className="h-32 object-contain opacity-90 drop-shadow-2xl"
                     />
                 </div>
 
-                <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-none drop-shadow-lg">
+                <h1 className="text-6xl font-black uppercase tracking-tight leading-none drop-shadow-lg">
                     {section.title}
                 </h1>
 
@@ -740,101 +763,221 @@ const Preview = ({ data }: { data: ProposalData }) => {
         </div>
     );
 
-    const COLORS = ['#522398', '#CFB53B', '#7a4bc8', '#3a176e', '#E0E0E0', '#4ade80', '#f97316', '#06b6d4'];
-
     const TableRenderer = ({ section }: { section: TableSection }) => (
-        <div className={clsx("relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page")} style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
-            <div className="mb-6 relative z-10 shrink-0">
-                <div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div>
-                <h2 className="text-3xl md:text-4xl font-extrabold uppercase tracking-tight leading-none" style={primaryStyle}>{section.title}</h2>
-                {section.subtitle && <p className="text-base md:text-lg font-light opacity-60 max-w-2xl mt-2">{section.subtitle}</p>}
-            </div>
-            <div className="flex-1 overflow-auto">
+        <SectionContainer>
+            <SectionHeader title={section.title} subtitle={section.subtitle} />
+            <div className="flex-1 overflow-auto relative z-10">
                 <table className="w-full border-collapse text-sm">
-                    {section.columns && section.columns.length > 0 && <thead><tr>{section.columns.map((h: string, i: number) => <th key={i} className="text-left px-4 py-3 font-bold border-b-2 text-white text-xs uppercase tracking-wider" style={bgPrimaryStyle}>{h}</th>)}</tr></thead>}
-                    <tbody>{(section.rows || []).map((row: string[], ri: number) => <tr key={ri} className={ri % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>{row.map((cell: string, ci: number) => <td key={ci} className="px-4 py-2.5 border-b border-gray-100">{cell}</td>)}</tr>)}</tbody>
+                    <thead>
+                        <tr>
+                            {section.columns.map((col, i) => (
+                                <th key={i} className="text-left px-4 py-3 font-bold text-white text-xs uppercase tracking-wider" style={{ backgroundColor: getPrimaryColor(), fontFamily: getHeadingFont() }}>
+                                    {col}
+                                </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {(section.rows || []).map((row, rowIdx) => (
+                            <tr key={rowIdx} className={`border-b border-gray-100 ${section.styleVariant === 'striped' && rowIdx % 2 === 0 ? 'bg-gray-50' : ''}`}>
+                                {row.map((cell, cellIdx) => (
+                                    <td key={cellIdx} className={`px-4 py-3 ${section.styleVariant === 'bordered' ? 'border border-gray-200' : ''}`} style={{ fontFamily: getBodyFont() }}>
+                                        {cell}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
-        </div>
+        </SectionContainer>
     );
 
     const TestimonialRenderer = ({ section }: { section: TestimonialSection }) => (
-        <div className={clsx("relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page")} style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
-            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2>{section.subtitle && <p className="text-lg text-gray-500 mt-1">{section.subtitle}</p>}</div>}
+        <SectionContainer>
+            <SectionHeader title={section.title} subtitle={section.subtitle} />
             <div className="flex-1 grid grid-cols-2 gap-8 relative z-10">
                 {(section.quotes || []).map((quote, i) => (
                     <div key={i} className="flex flex-col bg-gray-50 rounded-2xl p-8 border border-gray-100">
                         <Quote size={32} className="mb-4 opacity-20" style={{ color: getPrimaryColor() }} />
-                        <p className="text-lg italic flex-1 leading-relaxed">{quote.text}</p>
+                        <p className="text-lg italic flex-1 leading-relaxed" style={{ fontFamily: getBodyFont() }}>{quote.text}</p>
                         <div className="mt-6 flex items-center gap-3">
                             {quote.image && <img src={quote.image} className="w-10 h-10 rounded-full object-cover" alt={quote.author} />}
                             <div>
-                                <p className="font-bold text-sm" style={primaryStyle}>{quote.author}</p>
+                                <p className="font-bold text-sm" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>{quote.author}</p>
                                 {quote.role && <p className="text-xs text-gray-500">{quote.role}</p>}
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
-        </div>
+        </SectionContainer>
     );
 
     const DataVisualizationRenderer = ({ section }: { section: DataVisualizationSection }) => {
-        const gridClass = section.layout === 'grid-4' ? 'grid-cols-2' : section.layout === 'grid-2' ? 'grid-cols-2' : 'grid-cols-1';
-        const renderChart = (graph: any) => {
+        const COLORS = [getPrimaryColor(), getSecondaryColor(), '#7A4BC8', '#CFB53B', '#059669', '#FF6B35'];
+
+        const renderChart = (graph: any, key: number) => {
+            if (!graph || !graph.data || graph.data.length === 0) return null;
+
             switch (graph.type) {
-                case 'bar': return <ResponsiveContainer width="100%" height="100%"><BarChart data={graph.data}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="name" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><Tooltip /><Bar dataKey="value" fill={getPrimaryColor()} /></BarChart></ResponsiveContainer>;
-                case 'horizontal_bar': return <ResponsiveContainer width="100%" height="100%"><BarChart data={graph.data} layout="vertical"><CartesianGrid strokeDasharray="3 3" /><XAxis type="number" tick={{ fontSize: 11 }} /><YAxis dataKey="name" type="category" tick={{ fontSize: 11 }} width={80} /><Tooltip /><Bar dataKey="value" fill={getPrimaryColor()} /></BarChart></ResponsiveContainer>;
-                case 'pie': return <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={graph.data} cx="50%" cy="50%" outerRadius="60%" dataKey="value" label={({ name, percent }: { name?: string; percent?: number }) => `${name ?? ''} ${((percent ?? 0)*100).toFixed(0)}%`}>{graph.data.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer>;
-                case 'donut': return <ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={graph.data} cx="50%" cy="50%" innerRadius="40%" outerRadius="60%" dataKey="value">{graph.data.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}</Pie><Tooltip /><Legend /></PieChart></ResponsiveContainer>;
-                case 'line': return <ResponsiveContainer width="100%" height="100%"><LineChart data={graph.data}><CartesianGrid strokeDasharray="3 3" /><XAxis dataKey="name" tick={{ fontSize: 11 }} /><YAxis tick={{ fontSize: 11 }} /><Tooltip /><Line type="monotone" dataKey="value" stroke={getPrimaryColor()} strokeWidth={2} dot={false} /></LineChart></ResponsiveContainer>;
-                case 'radar': return <ResponsiveContainer width="100%" height="100%"><RadarChart data={graph.data}><PolarGrid /><PolarAngleAxis dataKey="name" tick={{ fontSize: 11 }} /><Radar dataKey="value" stroke={getPrimaryColor()} fill={getPrimaryColor()} fillOpacity={0.4} /></RadarChart></ResponsiveContainer>;
-                default: return null;
+                case 'bar':
+                case 'stacked_bar':
+                    return (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={graph.data} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                                <YAxis tick={{ fontSize: 11 }} />
+                                <Tooltip />
+                                {graph.series && graph.series.length > 0
+                                    ? graph.series.map((s: any, i: number) => <Bar key={s.key} dataKey={s.key} name={s.label} fill={s.color || COLORS[i % COLORS.length]} radius={[4,4,0,0]} stackId={graph.type === 'stacked_bar' ? 'a' : undefined} />)
+                                    : <Bar dataKey="value" fill={getPrimaryColor()} radius={[4,4,0,0]} />
+                                }
+                                {graph.series && <Legend />}
+                            </BarChart>
+                        </ResponsiveContainer>
+                    );
+                case 'horizontal_bar':
+                    return (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={graph.data} layout="vertical" margin={{ top: 5, right: 20, left: 40, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                                <XAxis type="number" tick={{ fontSize: 11 }} />
+                                <YAxis dataKey="name" type="category" tick={{ fontSize: 11 }} width={80} />
+                                <Tooltip />
+                                <Bar dataKey="value" fill={getPrimaryColor()} radius={[0,4,4,0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    );
+                case 'line':
+                    return (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={graph.data} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                                <YAxis tick={{ fontSize: 11 }} />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="value" stroke={getPrimaryColor()} strokeWidth={3} dot={{ fill: getPrimaryColor(), r: 4 }} />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    );
+                case 'pie':
+                    return (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie data={graph.data} cx="50%" cy="50%" outerRadius="60%" dataKey="value" label={({ name, percent }: { name?: string; percent?: number }) => `${name ?? ''} ${((percent ?? 0)*100).toFixed(0)}%`}>
+                                    {graph.data.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    );
+                case 'donut':
+                    return (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie data={graph.data} cx="50%" cy="50%" innerRadius="40%" outerRadius="60%" dataKey="value">
+                                    {graph.data.map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                                </Pie>
+                                <Legend />
+                                <Tooltip />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    );
+                case 'radar':
+                    return (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart data={graph.data}>
+                                <PolarGrid />
+                                <PolarAngleAxis dataKey="name" tick={{ fontSize: 11 }} />
+                                <PolarRadiusAxis tick={{ fontSize: 9 }} />
+                                <Radar name="Value" dataKey="value" stroke={getPrimaryColor()} fill={getPrimaryColor()} fillOpacity={0.3} />
+                                <Tooltip />
+                            </RadarChart>
+                        </ResponsiveContainer>
+                    );
+                case 'gauge': {
+                    const gaugeValue = graph.data[0]?.value || 0;
+                    const gaugeData = [{ name: 'Value', value: gaugeValue }, { name: 'Remaining', value: 100 - gaugeValue }];
+                    return (
+                        <div className="relative w-full h-full flex items-center justify-center">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie data={gaugeData} cx="50%" cy="60%" startAngle={180} endAngle={0} innerRadius="55%" outerRadius="75%" dataKey="value">
+                                        <Cell fill={getPrimaryColor()} />
+                                        <Cell fill="#E5E7EB" />
+                                    </Pie>
+                                </PieChart>
+                            </ResponsiveContainer>
+                            <div className="absolute bottom-[30%] text-center">
+                                <div className="text-3xl font-bold" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>{gaugeValue}%</div>
+                                <div className="text-xs text-gray-500">{graph.data[0]?.name || 'Score'}</div>
+                            </div>
+                        </div>
+                    );
+                }
+                default:
+                    return null;
             }
         };
+
+        const gridClass = section.layout === 'grid-4' ? 'grid-cols-2' : section.layout === 'grid-2' ? 'grid-cols-2' : 'grid-cols-1';
+        const charts = section.charts || [];
+
         return (
-            <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page" style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
-                {section.title && <div className="mb-6 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2></div>}
-                <div className={`flex-1 grid ${gridClass} gap-6`}>
-                    {(section.charts || []).map((graph: any, i: number) => (
-                        <div key={i} className="flex flex-col">
-                            {graph.title && <h3 className="text-sm font-bold mb-2 text-center">{graph.title}</h3>}
-                            <div className="flex-1" style={{ minHeight: 200 }}>{renderChart(graph)}</div>
+            <SectionContainer>
+                <SectionHeader title={section.title} subtitle={section.subtitle || section.description} />
+                <div className={`flex-1 grid ${gridClass} gap-6 relative z-10`}>
+                    {charts.map((chart, i) => (
+                        <div key={i} className="bg-gray-50 rounded-xl p-4 border border-gray-100" style={{ minHeight: section.layout === 'grid-4' ? '220px' : '300px' }}>
+                            {renderChart(chart, i)}
                         </div>
                     ))}
                 </div>
-            </div>
+            </SectionContainer>
         );
     };
 
     const KpiRenderer = ({ section }: { section: KpiSection }) => (
-        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page" style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
-            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2></div>}
-            <div className={`grid grid-cols-2 md:grid-cols-${Math.min(section.metrics?.length || 2, 4)} gap-4 flex-1`}>
-                {(section.metrics || []).map((m: any, i: number) => (
-                    <div key={i} className="rounded-2xl p-6 flex flex-col justify-between border" style={{ borderColor: getPrimaryColor() + '30', background: getPrimaryColor() + '08' }}>
-                        <div className="text-sm font-semibold opacity-70 mb-2">{m.label}</div>
-                        <div className="text-4xl font-black mb-2" style={primaryStyle}>{m.value}</div>
-                        {m.change !== undefined && <div className={`flex items-center gap-1 text-sm font-bold ${m.changeDirection !== 'down' ? 'text-emerald-600' : 'text-red-500'}`}>{m.changeDirection !== 'down' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}{m.change}</div>}
-                        {m.description && <p className="text-xs opacity-60 mt-1">{m.description}</p>}
+        <SectionContainer>
+            <SectionHeader title={section.title} subtitle={section.subtitle} />
+            <div className={`flex-1 ${section.layout === 'row' ? 'flex flex-row flex-wrap items-stretch' : 'grid grid-cols-2 lg:grid-cols-4'} gap-4 md:gap-6 relative z-10`}>
+                {(section.metrics || []).map((metric, i) => (
+                    <div key={i} className={`${section.layout === 'row' ? 'flex-1 min-w-[150px]' : ''} bg-white border border-gray-100 rounded-2xl shadow-sm flex flex-col items-center justify-center overflow-hidden`} style={{ borderTop: `6px solid ${getPrimaryColor()}` }}>
+                        <div className="flex flex-col items-center justify-center gap-3 p-6 md:p-8 w-full h-full">
+                            {metric.icon && <div className="text-4xl mb-1">{metric.icon}</div>}
+                            <div className="text-4xl lg:text-5xl font-extrabold leading-none text-center break-words max-w-full" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
+                                {metric.value}
+                            </div>
+                            <div className="text-sm font-semibold text-gray-600 text-center uppercase tracking-wide leading-snug" style={{ fontFamily: getBodyFont() }}>{metric.label}</div>
+                            {metric.change && (
+                                <div className={`flex items-center gap-1 text-sm font-bold px-3 py-1 rounded-full whitespace-nowrap ${metric.changeDirection === 'up' ? 'text-emerald-700 bg-emerald-50' : 'text-red-600 bg-red-50'}`}>
+                                    {metric.changeDirection === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                                    {metric.change}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
-        </div>
+        </SectionContainer>
     );
 
     const ComparisonRenderer = ({ section }: { section: ComparisonSection }) => (
-        <div className="relative w-full min-h-screen md:h-[1056px] flex flex-col p-6 sm:p-10 md:p-16 break-before-page" style={{ backgroundColor: getBgColor(), color: getTextColor(), fontFamily: getBodyFont() }}>
-            {section.title && <div className="mb-8 shrink-0"><div className="flex items-center gap-3 mb-2"><div className="h-1 w-12 rounded-full" style={bgPrimaryStyle}></div><span className="text-sm font-bold tracking-widest uppercase opacity-60">Grand Canyon University</span></div><h2 className="text-3xl font-extrabold uppercase" style={primaryStyle}>{section.title}</h2>{section.subtitle && <p className="text-lg text-gray-500 mt-1">{section.subtitle}</p>}</div>}
-            <div className="flex-1 grid gap-4" style={{ gridTemplateColumns: `repeat(${Math.min(section.columns?.length || 2, 4)}, 1fr)` }}>
-                {(section.columns || []).map((col: any, ci: number) => (
-                    <div key={ci} className={`rounded-2xl overflow-hidden border-2 ${col.highlighted ? 'shadow-xl' : 'border-gray-200'}`} style={{ borderColor: col.highlighted ? getPrimaryColor() : undefined }}>
+        <SectionContainer>
+            <SectionHeader title={section.title} subtitle={section.subtitle} />
+            <div className="flex-1 grid gap-4 relative z-10" style={{ gridTemplateColumns: `repeat(${Math.min(section.columns?.length || 2, 4)}, 1fr)` }}>
+                {(section.columns || []).map((col, i) => (
+                    <div key={i} className={`rounded-2xl overflow-hidden border-2 ${col.highlighted ? 'shadow-xl scale-[1.02]' : 'border-gray-200'}`} style={{ borderColor: col.highlighted ? getPrimaryColor() : undefined }}>
                         <div className="px-6 py-4 text-center" style={{ backgroundColor: col.highlighted ? getPrimaryColor() : '#F3F4F6' }}>
-                            <h3 className="text-lg font-extrabold" style={{ color: col.highlighted ? 'white' : getTextColor() }}>{col.heading}</h3>
+                            <h3 className="text-lg font-extrabold" style={{ color: col.highlighted ? 'white' : getTextColor(), fontFamily: getHeadingFont() }}>
+                                {col.heading}
+                            </h3>
                         </div>
                         <div className="divide-y divide-gray-100">
-                            {(col.items || []).map((item: any, i: number) => (
-                                <div key={i} className="px-6 py-3 flex items-center justify-between">
+                            {(col.items || []).map((item, j) => (
+                                <div key={j} className="px-6 py-3 flex items-center justify-between" style={{ fontFamily: getBodyFont() }}>
                                     <span className="text-sm text-gray-600">{item.label}</span>
                                     <span className="text-sm font-bold" style={{ color: col.highlighted ? getPrimaryColor() : getTextColor() }}>{item.value}</span>
                                 </div>
@@ -843,14 +986,14 @@ const Preview = ({ data }: { data: ProposalData }) => {
                     </div>
                 ))}
             </div>
-        </div>
+        </SectionContainer>
     );
 
     // --- MAIN RENDER ---
     return (
-        <div className="preview-container w-full max-w-full md:max-w-[816px] mx-auto bg-white shadow-none md:shadow-2xl my-0 md:my-10 overflow-hidden print:w-full print:max-w-none print:shadow-none print:my-0">
+        <div className="preview-container w-full max-w-[816px] mx-auto bg-white shadow-2xl my-10 overflow-hidden print:w-full print:max-w-none print:shadow-none print:my-0">
             <style>
-                {`@import url('https://fonts.googleapis.com/css2?family=Graduate&family=Inter:wght@300;400;600;800&family=Lato:wght@300;400;700&family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600;800&family=Open+Sans:wght@300;400;600;800&family=Oswald:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600;700&family=Raleway:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');`}
+                {`@import url('https://fonts.googleapis.com/css2?family=Graduate&family=Inter:wght@300;400;600;800&family=Lato:wght@300;400;700&family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;600;800&family=Open+Sans:wght@300;400;600;800&family=Oswald:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600;700&family=Raleway:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&family=Source+Sans+3:wght@300;400;600;700&display=swap');`}
             </style>
             {data.sections.map((section) => (
                 <div key={section.id} data-section-id={section.id}>
