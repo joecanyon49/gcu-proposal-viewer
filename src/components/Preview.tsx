@@ -613,16 +613,11 @@ const Preview = ({ data }: { data: ProposalData }) => {
     );
 
     const VideoShowcase = ({ section }: { section: VideoShowcaseSection }) => (
-        <SectionContainer className="print:hidden relative overflow-hidden">
-            {/* Visual background split to make it more dynamic */}
-            <div className="absolute inset-0 z-0 pointer-events-none">
-                <div className="w-full h-1/3 bg-gray-50/50"></div>
-                <div className="w-full h-2/3 bg-gray-900 border-t border-gray-800"></div>
-            </div>
+        <SectionContainer className="print:hidden relative overflow-hidden bg-white">
             
             <div className="flex flex-col flex-1 w-full max-w-6xl mx-auto items-center justify-center relative z-10 px-4 xl:px-8">
-                <div className="text-center w-full max-w-4xl mb-12 bg-white/60 backdrop-blur-md p-10 rounded-[3rem] shadow-xl border border-white">
-                     <div className="inline-block p-2 px-6 rounded-full bg-white text-gray-400 font-bold uppercase tracking-widest text-xs mb-6 shadow-sm">
+                <div className="text-center w-full max-w-4xl mb-12 bg-white p-10 rounded-[3rem]">
+                     <div className="inline-block p-2 px-6 rounded-full bg-gray-50 text-gray-500 font-bold uppercase tracking-widest text-xs mb-6 shadow-sm border border-gray-100">
                          Video Feature
                      </div>
                      <h3 className="text-5xl lg:text-6xl font-black mb-6 uppercase tracking-tight leading-tight" style={{ color: getPrimaryColor(), fontFamily: getHeadingFont() }}>
@@ -633,7 +628,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
                      </p>}
                 </div>
                 
-                <div className="w-full max-w-5xl aspect-video rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-[8px] sm:border-[16px] border-white/10 bg-black relative transform hover:-translate-y-2 transition-transform duration-700" style={{ boxShadow: `0 30px 60px -12px ${getPrimaryColor()}40` }}>
+                <div className="w-full max-w-5xl aspect-video rounded-[2rem] overflow-hidden shadow-2xl border-[8px] sm:border-[16px] border-gray-100 bg-gray-900 relative transform hover:-translate-y-2 transition-transform duration-700">
                     {section.videoUrl ? (
                         <iframe
                             src={getEmbedUrl(section.videoUrl)}
@@ -704,8 +699,8 @@ const Preview = ({ data }: { data: ProposalData }) => {
                         {section.image && (
                             <div className="w-full aspect-auto h-[350px] md:h-[400px] rounded-[2rem] overflow-hidden shadow-2xl relative group border-2 border-white">
                                 <img src={section.image} alt="Commitment" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style={{ objectPosition: section.imagePosition || 'center' }} />
-                                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
-                                <div className="absolute bottom-16 left-8 right-8 text-white z-10">
+                                <div className="absolute inset-0 bg-gradient-to-b from-gray-900/80 via-transparent to-transparent"></div>
+                                <div className="absolute top-8 left-8 right-8 text-white z-10">
                                     <div className="w-8 h-1 rounded-full mb-4 bg-white/80"></div>
                                     <p className="font-black text-2xl uppercase tracking-widest opacity-90 leading-tight">Partnership</p>
                                 </div>
@@ -973,11 +968,7 @@ const Preview = ({ data }: { data: ProposalData }) => {
     };
 
     const KpiRenderer = ({ section }: { section: KpiSection }) => (
-        <SectionContainer className="relative overflow-hidden">
-            {/* Soft decorative background for Key Metrics */}
-            <div className="absolute -top-40 -right-40 w-[800px] h-[800px] rounded-full mix-blend-multiply opacity-5 blur-[100px] pointer-events-none" style={bgPrimaryStyle}></div>
-            <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full mix-blend-multiply opacity-5 blur-[80px] pointer-events-none" style={{ backgroundColor: getSecondaryColor() }}></div>
-
+        <SectionContainer className="relative overflow-hidden bg-white">
             <SectionHeader title={section.title} subtitle={section.subtitle} />
             
             <div className="flex-1 flex flex-col justify-center relative z-10 mt-8">
