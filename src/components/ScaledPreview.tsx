@@ -11,25 +11,30 @@ const DESIGN_WIDTH = 816; // Preview's fixed logical width in px
  *
  * Preview is mirrored from the portal repo and was designed at a fixed
  * letter-page width — its sections use absolute font/spacing values that
- * overflow on phones. Rather than rewrite every section, we transform the
- * whole tree with CSS scale on narrow viewports. The wrapper height is
- * adjusted to match so vertical scrolling continues to work.
+ * overflow on phones. Rather than rewrite every section, we shrink the
+ * whole tree on narrow viewports.
  *
- * Print is left untouched — `@media print` reverses the scale so PDFs
+ * We use CSS `zoom` (not `transform: scale`) deliberately. Mobile Safari
+ * has a long-standing bug where iframes inside a `transform`ed parent
+ * render as a black box — which broke the video showcase / video story
+ * sections on phones. `zoom` is treated as a layout/rendering property
+ * by browsers, so iframes render correctly, and the parent's box model
+ * resizes naturally so vertical scrolling Just Works without us tracking
+ * scrollHeight manually. Supported in all modern browsers, including
+ * iOS Safari and Firefox 126+.
+ *
+ * Print is left untouched — `@media print` resets zoom so PDFs still
  * render at full resolution.
  */
 export default function ScaledPreview({ data }: { data: ProposalData }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const [innerHeight, setInnerHeight] = useState<number | null>(null);
+  const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
     const recalc = () => {
       const containerW = containerRef.current?.clientWidth ?? window.innerWidth;
       // Cap at 1 so wide screens render the design at 100% — never upscale.
-      const next = Math.min(1, containerW / DESIGN_WIDTH);
-      setScale(next);
+      setZoom(Math.min(1, containerW / DESIGN_WIDTH));
     };
 
     recalc();
@@ -42,36 +47,12 @@ export default function ScaledPreview({ data }: { data: ProposalData }) {
     };
   }, []);
 
-  // Track the inner content height so the outer wrapper is tall enough
-  // to expose every scaled section to vertical scroll.
-  useEffect(() => {
-    if (!innerRef.current) return;
-    const measure = () => {
-      const h = innerRef.current?.scrollHeight ?? 0;
-      setInnerHeight(h);
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(innerRef.current);
-    return () => ro.disconnect();
-  }, [scale, data]);
-
-  const wrapperHeight = innerHeight !== null ? innerHeight * scale : undefined;
-
   return (
-    <div
-      ref={containerRef}
-      className="w-full overflow-hidden print:overflow-visible"
-      style={{ height: wrapperHeight }}
-    >
+    <div ref={containerRef} className="w-full print:overflow-visible">
+      <style>{`@media print { .scaled-preview-inner { zoom: 1 !important; } }`}</style>
       <div
-        ref={innerRef}
-        className="origin-top-left print:!transform-none"
-        style={{
-          width: DESIGN_WIDTH,
-          transform: `scale(${scale})`,
-          transformOrigin: 'top left',
-        }}
+        className="scaled-preview-inner mx-auto"
+        style={{ zoom, width: DESIGN_WIDTH } as React.CSSProperties}
       >
         <Preview data={data} />
       </div>
