@@ -2,7 +2,7 @@ import { db } from '@/db';
 import { proposals } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
-import Preview from '@/components/Preview';
+import ScaledPreview from '@/components/ScaledPreview';
 import { ProposalData } from '@/types/proposal';
 
 export const dynamic = 'force-dynamic';
@@ -23,9 +23,9 @@ export default async function ProposalPage({ params }: PageProps) {
   const data = result[0].data as ProposalData;
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center overflow-y-auto text-black" style={{ colorScheme: 'light' }}>
-      <div className="bg-white w-full md:w-[816px] min-h-screen">
-        <Preview data={data} />
+    <div className="min-h-screen bg-white flex flex-col items-center text-black" style={{ colorScheme: 'light' }}>
+      <div className="bg-white w-full max-w-[816px]">
+        <ScaledPreview data={data} />
       </div>
 
       <div className="mt-8 mb-4 text-xs text-gray-300 print:hidden">
