@@ -22,11 +22,42 @@ export const viewport: Viewport = {
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ s?: string }>;
 }
 
-export default async function ProposalPage({ params }: PageProps) {
+/**
+ * Donor-facing proposal page.
+ *
+ * Two modes:
+ *   1. **New (Design Generator)** — donor URL carries `?s=<share-token>`.
+ *      We render an iframe of the main portal's `/share/design/<id>?s=<token>`
+ *      route. The portal owns the data + renderer; the viewer URL stays on
+ *      `gcu-proposal-viewer.vercel.app/<id>` in the address bar.
+ *   2. **Legacy (proposal-builder)** — no `s` param. We fall back to the
+ *      historical Vercel Postgres lookup so old shared links keep resolving.
+ */
+export default async function ProposalPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const { s: shareToken } = await searchParams;
 
+  // ── Mode 1: Design Generator share token present ─────────────────────────
+  if (shareToken) {
+    const portalBase = process.env.MAIN_PORTAL_URL || 'https://portal.gcudevelopment.com';
+    const innerUrl = `${portalBase}/share/design/${encodeURIComponent(id)}?s=${encodeURIComponent(shareToken)}`;
+    return (
+      <div className="min-h-screen bg-white" style={{ colorScheme: 'light' }}>
+        <iframe
+          src={innerUrl}
+          className="w-screen h-screen border-0 block"
+          style={{ minHeight: '100vh' }}
+          title="GCU Proposal"
+          sandbox="allow-scripts allow-forms allow-popups allow-same-origin allow-downloads"
+        />
+      </div>
+    );
+  }
+
+  // ── Mode 2: legacy proposal-builder lookup ───────────────────────────────
   const result = await db.select().from(proposals).where(eq(proposals.id, id)).limit(1);
 
   if (result.length === 0) {
