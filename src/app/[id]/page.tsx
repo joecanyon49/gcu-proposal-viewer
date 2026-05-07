@@ -42,7 +42,7 @@ export default async function ProposalPage({ params, searchParams }: PageProps) 
 
   // ── Mode 1: Design Generator share token present ─────────────────────────
   if (shareToken) {
-    const portalBase = process.env.MAIN_PORTAL_URL || 'https://portal.gcudevelopment.com';
+    const portalBase = process.env.MAIN_PORTAL_URL || 'https://gcu-development-portal.vercel.app';
     const innerUrl = `${portalBase}/share/design/${encodeURIComponent(id)}?s=${encodeURIComponent(shareToken)}`;
     return (
       <div className="min-h-screen bg-white" style={{ colorScheme: 'light' }}>
