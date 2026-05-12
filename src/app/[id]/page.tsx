@@ -2,23 +2,10 @@ import { db } from '@/db';
 import { proposals } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
-import type { Viewport } from 'next';
-import Preview from '@/components/Preview';
+import ScaledPreview from '@/components/ScaledPreview';
 import { ProposalData } from '@/types/proposal';
 
 export const dynamic = 'force-dynamic';
-
-// Render the proposal at its native 816px design width and let mobile
-// browsers auto-fit the layout viewport into the device viewport. This
-// is the same trick desktop-only sites use to render correctly on phones
-// — the browser handles scaling natively, so iframes (the video sections)
-// render normally instead of going black like they do inside CSS
-// transform:scale or zoom wrappers. Pinch-zoom is preserved (max 5x) so
-// donors can zoom in to read fine print.
-export const viewport: Viewport = {
-  width: 816,
-  maximumScale: 5,
-};
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -27,8 +14,9 @@ interface PageProps {
 /**
  * Donor-facing legacy proposal page (proposal-builder era). Reads from
  * Vercel Postgres via Drizzle and renders with the legacy Preview
- * component. New Design Generator donor URLs are served directly by the
- * portal at portal/share/design/<id>?s=<token> and don't pass through here.
+ * component wrapped in a client-side scale wrapper for mobile fit.
+ * New Design Generator donor URLs are served directly by the portal at
+ * /share/design/<id>?s=<token> and don't pass through here.
  */
 export default async function ProposalPage({ params }: PageProps) {
   const { id } = await params;
@@ -43,7 +31,7 @@ export default async function ProposalPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center text-black" style={{ colorScheme: 'light' }}>
-      <Preview data={data} />
+      <ScaledPreview data={data} />
 
       <div className="mt-8 mb-4 text-xs text-gray-300 print:hidden">
         Powered by GCU
