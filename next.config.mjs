@@ -31,9 +31,22 @@ const nextConfig = {
                     has: [{ type: 'query', key: 's' }],
                     destination: `${PORTAL}/share/design/:id`,
                 },
-                // The proxied portal page references these paths relatively.
-                // Forwarding them keeps the donor's browser pointed at this
-                // hostname while the actual bytes come from the portal.
+            ],
+            // afterFiles: only fires when the viewer doesn't have the file
+            // locally. The proxied portal page's HTML references chunks/CSS
+            // under /_next/* — those hashes won't match anything on the
+            // viewer's build, so the file lookup fails and the rewrite
+            // forwards them to the portal. The viewer's OWN [id] page (legacy
+            // ScaledPreview wrapper, etc.) has its own /_next/* chunks that
+            // DO match locally — they hit before any rewrite fires.
+            //
+            // Previously these were in beforeFiles, which intercepted EVERY
+            // /_next request before the local file lookup. Result: the
+            // viewer's own client-side JS 404'd (chunks routed to the
+            // portal where they don't exist), ScaledPreview never hydrated,
+            // legacy proposals rendered at scale(1) on mobile = horizontal
+            // overflow, donor sees only the left strip.
+            afterFiles: [
                 { source: '/_next/:path*',     destination: `${PORTAL}/_next/:path*` },
                 { source: '/brand/:path*',     destination: `${PORTAL}/brand/:path*` },
                 { source: '/api/design/:path*', destination: `${PORTAL}/api/design/:path*` },
