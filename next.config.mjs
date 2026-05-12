@@ -31,24 +31,33 @@ const nextConfig = {
                     has: [{ type: 'query', key: 's' }],
                     destination: `${PORTAL}/share/design/:id`,
                 },
-            ],
-            // afterFiles: only fires when the viewer doesn't have the file
-            // locally. The proxied portal page's HTML references chunks/CSS
-            // under /_next/* — those hashes won't match anything on the
-            // viewer's build, so the file lookup fails and the rewrite
-            // forwards them to the portal. The viewer's OWN [id] page (legacy
-            // ScaledPreview wrapper, etc.) has its own /_next/* chunks that
-            // DO match locally — they hit before any rewrite fires.
-            //
-            // Previously these were in beforeFiles, which intercepted EVERY
-            // /_next request before the local file lookup. Result: the
-            // viewer's own client-side JS 404'd (chunks routed to the
-            // portal where they don't exist), ScaledPreview never hydrated,
-            // legacy proposals rendered at scale(1) on mobile = horizontal
-            // overflow, donor sees only the left strip.
-            afterFiles: [
-                { source: '/_next/:path*',     destination: `${PORTAL}/_next/:path*` },
-                { source: '/brand/:path*',     destination: `${PORTAL}/brand/:path*` },
+                // /_next/* and /brand/* — only proxy to portal when the
+                // request was triggered by a proxied portal share page
+                // (referer contains `?s=`). The viewer's OWN [id] page
+                // (legacy proposal-builder, no token) generates its own
+                // client bundle (ScaledPreview etc.) with viewer-specific
+                // hashes — those requests must hit viewer's local
+                // /_next/* files, NOT get rewritten to portal where they
+                // 404. Same-origin referer always includes the full URL
+                // with query string (default Referrer-Policy), so the
+                // regex reliably distinguishes the two cases.
+                //
+                // We can't use `afterFiles` for this: Vercel's CDN serves
+                // `/_next/static/*` directly before any afterFiles rule
+                // fires, so a missing portal chunk on viewer returns 404
+                // instead of falling through to the rewrite.
+                {
+                    source: '/_next/:path*',
+                    has: [{ type: 'header', key: 'referer', value: '.*\\?s=.*' }],
+                    destination: `${PORTAL}/_next/:path*`,
+                },
+                {
+                    source: '/brand/:path*',
+                    has: [{ type: 'header', key: 'referer', value: '.*\\?s=.*' }],
+                    destination: `${PORTAL}/brand/:path*`,
+                },
+                // /api/design/* is portal-only; viewer has no conflicting
+                // route, so proxy unconditionally.
                 { source: '/api/design/:path*', destination: `${PORTAL}/api/design/:path*` },
             ],
         };
