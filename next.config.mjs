@@ -56,6 +56,19 @@ const nextConfig = {
                     has: [{ type: 'header', key: 'referer', value: '.*\\?s=.*' }],
                     destination: `${PORTAL}/brand/:path*`,
                 },
+                // Same referer-gated pattern as /brand/*: portal ships
+                // brand fonts (Thunder) under /fonts/* and references them
+                // via `@font-face src: url('/fonts/...')` in globals.css.
+                // Without this rewrite the donor's browser requests the
+                // font from the viewer hostname and 404s, falling back to
+                // Inter. Gated by referer so the viewer's own legacy
+                // pages keep serving their local /fonts/* (none today,
+                // but stays consistent with /brand/*).
+                {
+                    source: '/fonts/:path*',
+                    has: [{ type: 'header', key: 'referer', value: '.*\\?s=.*' }],
+                    destination: `${PORTAL}/fonts/:path*`,
+                },
                 // /api/design/* is portal-only; viewer has no conflicting
                 // route, so proxy unconditionally.
                 { source: '/api/design/:path*', destination: `${PORTAL}/api/design/:path*` },
