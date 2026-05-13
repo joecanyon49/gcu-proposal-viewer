@@ -56,17 +56,16 @@ const nextConfig = {
                     has: [{ type: 'header', key: 'referer', value: '.*\\?s=.*' }],
                     destination: `${PORTAL}/brand/:path*`,
                 },
-                // Same referer-gated pattern as /brand/*: portal ships
-                // brand fonts (Thunder) under /fonts/* and references them
-                // via `@font-face src: url('/fonts/...')` in globals.css.
-                // Without this rewrite the donor's browser requests the
-                // font from the viewer hostname and 404s, falling back to
-                // Inter. Gated by referer so the viewer's own legacy
-                // pages keep serving their local /fonts/* (none today,
-                // but stays consistent with /brand/*).
+                // /fonts/* — UNCONDITIONAL proxy to portal (unlike /brand/*
+                // and /_next/*, which are referer-gated). Why: fonts loaded
+                // via @font-face in CSS use the CSS file's URL as the
+                // referer, NOT the page URL — so the regex `.*\?s=.*`
+                // never matches and gating breaks font delivery. The
+                // viewer has no local /fonts/* files, so unconditional
+                // proxy is safe (legacy proposal pages don't reference
+                // any /fonts/* assets either).
                 {
                     source: '/fonts/:path*',
-                    has: [{ type: 'header', key: 'referer', value: '.*\\?s=.*' }],
                     destination: `${PORTAL}/fonts/:path*`,
                 },
                 // /api/design/* is portal-only; viewer has no conflicting
